@@ -7,9 +7,15 @@ import java.util.List;
  * Created by Вячеслав Молоков on 29.04.2017.
  */
 public class ChapterContent {
+    public enum Type {
+        SECTION, PARA, ITEMLIST, ITEMLIST_ITEM, ORDEREDLIST, ORDEREDLIST_ITEM
+    }
+
     private String title;
 
-    int level;
+    private int level;
+
+    private Type type;
 
     private List<ChapterContent> contentList = new ArrayList<>();
 
@@ -31,5 +37,13 @@ public class ChapterContent {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

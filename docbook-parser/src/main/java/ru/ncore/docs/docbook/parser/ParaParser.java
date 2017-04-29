@@ -18,7 +18,7 @@ public class ParaParser implements IContentParser {
     @Override
     public ChapterContent parse(int currentLevel) {
         ChapterContent para = new ChapterContent();
-
+        para.setType(ChapterContent.Type.PARA);
         para.setLevel(currentLevel);
         para.setTitle(XMLUtils.getNodeValue(xmlDocument, "./text()"));
 

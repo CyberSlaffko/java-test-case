@@ -26,6 +26,7 @@ public class SectionParser implements IContentParser {
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./*");
 
         ChapterContent section = new ChapterContent();
+        section.setType(ChapterContent.Type.SECTION);
         section.setLevel(currentLevel);
         List<ChapterContent> contentList = section.getContentList();
         int nextLevel = currentLevel + 1;
