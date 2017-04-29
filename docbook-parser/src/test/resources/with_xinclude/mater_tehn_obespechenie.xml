@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="ru" version="5.0">
+    <title>Общие требования</title>
+    <para>При создании модели сервиса «ИБД-М» применяются следующие технические средства:<itemizedlist>
+        <listitem>
+            <para>серверное оборудование и ресурсы облачной инфраструктуры ИСОД МВД России для создания информационно-вычислительной инфраструктуры;</para>
+        </listitem>
+        <listitem>
+            <para>АРМ пользователей ИСОД МВД России.</para>
+        </listitem>
+    </itemizedlist></para>
+    <para>Серверная часть модели сервиса «ИБД-М» размещается в облачной инфраструктуре единого информационного пространства ИСОД МВД России.</para>
+    <para>Процедура установки серверной части модели сервиса «ИБД-М» описывается в соответствующих документах:<itemizedlist>
+        <listitem>
+            <para>«Руководство по сборке модели сервиса «ИБД-М» (RU.35897050.00004-01 98 01).</para>
+        </listitem>
+    </itemizedlist></para>
+    <para>Доступ к модели сервиса «ИБД-М» осуществляется через технические средства Заказчика.</para>
+    <para>АРМ состоит из комплекса программно-технических средств, необходимых и достаточных для функционирования модели сервиса «ИБД-М», при этом должна быть обеспечена следующая минимальная конфигурация компьютера:</para>
+    <para>
+        <itemizedlist>
+            <listitem>
+                <para>процессор Intel Core i3;</para>
+            </listitem>
+            <listitem>
+                <para>жесткий диск не менее 200 Гб;</para>
+            </listitem>
+            <listitem>
+                <para>оперативная память не менее 2 Гб;</para>
+            </listitem>
+            <listitem>
+                <para>монитор с диагональю экрана не менее 23 дюймов с разрешением 1920x1080;</para>
+            </listitem>
+            <listitem>
+                <para>КриптоПРО CSP 3.6;</para>
+            </listitem>
+            <listitem>
+                <para>СУДИС webserver;</para>
+            </listitem>
+            <listitem>
+                <para>RuToken;</para>
+            </listitem>
+            <listitem>
+                <para>устройства ввода – клавиатура и манипулятор типа «мышь».</para>
+            </listitem>
+        </itemizedlist>
+    </para>
+    <para>На АРМ оператора необходимо установить минимальный набор программных средств:</para>
+    <para>
+        <itemizedlist>
+            <listitem>
+                <para>Windows XP и выше;</para>
+            </listitem>
+            <listitem>
+                <para>программное обеспечение для просмотра и печати файлов формата PDF;</para>
+            </listitem>
+            <listitem>
+                <para>интернет-обозреватель.</para>
+            </listitem>
+            
+        </itemizedlist>
+    </para>
+    <para>Интернет-обозреватель должен поддерживать язык HTML 5 и соответствовать следующим требованиям:<itemizedlist>
+        <listitem>
+            <para>Internet Explorer версии не ниже 10;</para>
+        </listitem>
+        <listitem>
+            <para>Mozilla Firefox версии не ниже 26;</para>
+        </listitem>
+        <listitem>
+            <para>Google Chrome версии не ниже 32.</para>
+        </listitem>
+    </itemizedlist></para>
+    <para>Примечание – АРМ оператора должен быть подключен в сеть ИМТС.</para>
+</section>

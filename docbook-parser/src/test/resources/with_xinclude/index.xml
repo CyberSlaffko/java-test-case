@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://xsd.org/xml/5.0/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://xsd.org/xml/5.0/rng/xsd.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type="text/xsl" href="../styles/espd.xsl"?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="ru" version="5.0">
+    <info>
+        <title>Название ОКР</title>
+        <titleabbrev>шифр окр</titleabbrev>
+        <productname>Название СЧ ОКР</productname>
+        <subtitle>РУКОВОДСТВО ПО СБОРКЕ</subtitle>
+        <contractnum>RU.35897050.00004-01</contractnum>
+        <issuenum>RU.35897050.00004-01 98 01</issuenum>
+        <pubdate>2016</pubdate>
+    </info>
+
+    <chapter>
+        <title>Название главы 1</title>
+        <xi:include href="mater_tehn_obespechenie.xml" />
+        <section>
+            <title>Состав дистрибутива</title>
+
+            <para>Исходные коды СПО модели сервиса «ИБД-М» располагаются на CD-диске: «RU.35897050.00004-01 12 01. Текст
+                программы. Запись на исходном языке».
+            </para>
+            <para>В состав дистрибутива входят следующие файлы:
+                <itemizedlist>
+                    <listitem>
+                        <para>&lt;sources.zip&gt; - архив, содержащий файлы с текстом программы на исходном языке;
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>&lt;sources.md5&gt; - файл с хеш-суммой (128-битный алгоритм хеширования);</para>
+                    </listitem>
+                    <listitem>
+                        <para>&lt;sources.sha&gt; - файл с хеш-суммой (алгоритм хеширования SHA).</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    </chapter>
+</book>
