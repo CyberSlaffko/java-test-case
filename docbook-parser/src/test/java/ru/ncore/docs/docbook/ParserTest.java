@@ -33,7 +33,15 @@ class ParserTest {
         checkParserResultSuccess(parseResult);
 
         DocumentInfo info = parseResult.getInfo();
-        checkDocuementInfo(info);
+        checkDocumentInfo(info);
+
+        Chapter annotationChapter = parseResult.getAnnotaion();
+        assertNotNull(annotationChapter);
+
+        assertAll(
+                () -> assertEquals("Аннотация1", annotationChapter.getTitle()),
+                () -> assertEquals(1, annotationChapter.getContentList().size())
+        );
 
         List<Chapter> chaptersList = parseResult.getChaptersList();
         assertAll(
@@ -73,7 +81,7 @@ class ParserTest {
         checkParserResultSuccess(parseResult);
 
         DocumentInfo info = parseResult.getInfo();
-        checkDocuementInfo(info);
+        checkDocumentInfo(info);
 
         List<Chapter> chaptersList = parseResult.getChaptersList();
         assertAll(
@@ -95,7 +103,7 @@ class ParserTest {
         );
     }
 
-    private void checkDocuementInfo(DocumentInfo info) {
+    private void checkDocumentInfo(DocumentInfo info) {
         assertAll(
                 () -> assertEquals("Название ОКР", info.getTitle()),
                 () -> assertEquals("шифр окр", info.getTitleAbbrev()),

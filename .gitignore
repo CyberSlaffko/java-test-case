@@ -1,2 +1,4 @@
 .idea/
 **/target/**
+docx-templates-kraftway-pmi/src/test/resources/
+out/

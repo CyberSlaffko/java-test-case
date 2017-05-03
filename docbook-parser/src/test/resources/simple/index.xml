@@ -14,6 +14,13 @@
         <pubdate>2016</pubdate>
     </info>
 
+    <preface xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="ru" version="5.0" role="NotInToc">
+        <info>
+            <title>Аннотация1</title>
+        </info>
+        <para>Бла-бла.</para>
+    </preface>
+
     <chapter>
         <title>Название
 

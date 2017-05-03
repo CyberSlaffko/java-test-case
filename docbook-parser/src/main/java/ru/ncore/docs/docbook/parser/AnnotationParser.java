@@ -1,31 +1,39 @@
 package ru.ncore.docs.docbook.parser;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.document.Chapter;
-import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
 
 /**
- * Created by Вячеслав Молоков on 29.04.2017.
+ * Created by Вячеслав Молоков on 03.05.2017.
  */
-public class ChapterParser {
-    private org.w3c.dom.Document xmlDocument;
+public class AnnotationParser {
+    private static final String ANNOTATION_TITLE = "Аннотация";
+    private static final int ANNOTATION_INDEX = 0;
+    private Document xmlDocument;
 
-    public ChapterParser(org.w3c.dom.Document xmlDocument) {
+    public AnnotationParser(Document xmlDocument) {
+
         this.xmlDocument = xmlDocument;
     }
 
-    public void parse(Document document) {
-        NodeList nodes = XMLUtils.getNodes(xmlDocument, "/d:book/d:chapter");
+    public void parse(ru.ncore.docs.docbook.Document document) {
+        NodeList nodes = XMLUtils.getNodes(xmlDocument, "/d:book/d:preface");
 
-        List<Chapter> chaptersList = document.getChaptersList();
-
-        for(int i = 0; i < nodes.getLength(); i++) {
-            chaptersList.add(parseChapter(nodes.item(i)));
+        if (0 == nodes.getLength()) {
+            return;
         }
+
+        Chapter annotation = parseChapter(nodes.item(ANNOTATION_INDEX));
+        if (null == annotation.getTitle() || annotation.getTitle().isEmpty()) {
+            annotation.setTitle(ANNOTATION_TITLE);
+        }
+
+        document.setAnnotaion(annotation);
     }
 
     private Chapter parseChapter(Node chapterNode) {
@@ -38,8 +46,8 @@ public class ChapterParser {
         for(int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 
-            if (contentNode.getNodeName().equals("title")) {
-                chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./text()"));
+            if (contentNode.getNodeName().equals("info")) {
+                chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./d:title/text()"));
             }
             else {
                 IContentParser parser = ContentParserFactory.getParserFor(contentNode);

@@ -1,6 +1,7 @@
 package ru.ncore.docs.docbook;
 
 import org.xml.sax.SAXException;
+import ru.ncore.docs.docbook.parser.AnnotationParser;
 import ru.ncore.docs.docbook.parser.ChapterParser;
 import ru.ncore.docs.docbook.parser.DocumentInfoParser;
 
@@ -49,6 +50,7 @@ public class Parser {
 
     private void parseXmlDocument() {
         new DocumentInfoParser(xmlDocument).parse(document);
+        new AnnotationParser(xmlDocument).parse(document);
         new ChapterParser(xmlDocument).parse(document);
     }
 
