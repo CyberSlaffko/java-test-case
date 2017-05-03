@@ -7,7 +7,13 @@ import java.io.OutputStream;
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
  */
-public interface IContentRenderer {
-    void render(OutputStream wordDocumentData);
-    IContentRenderer setContent(ChapterContent contentData);
+public abstract class IContentRenderer {
+    protected ChapterContent contentData;
+
+    abstract void render(OutputStream wordDocumentData);
+
+    IContentRenderer setContent(ChapterContent contentData) {
+        this.contentData = contentData;
+        return this;
+    }
 }

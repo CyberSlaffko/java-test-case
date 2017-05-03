@@ -29,12 +29,12 @@ public class ChapterParser {
     }
 
     private Chapter parseChapter(Node chapterNode) {
-        NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
         Chapter chapter = new Chapter();
 
         List<ChapterContent> contentList = chapter.getContentList();
         int nextLevel = chapter.getLevel() + 1;
 
+        NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
         for(int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 

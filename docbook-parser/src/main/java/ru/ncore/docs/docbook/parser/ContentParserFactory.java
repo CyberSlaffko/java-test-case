@@ -11,6 +11,7 @@ public class ContentParserFactory {
         switch (contentNode.getNodeName()) {
             case "section": return new SectionParser().setNode(contentNode);
             case "para": return new ParaParser().setNode(contentNode);
+            case "itemizedlist": return new ItemizedListParser().setNode(contentNode);
             default: {
                 System.out.printf("[W001] Unknown tag: %s\n", contentNode.getNodeName());
                 return null;

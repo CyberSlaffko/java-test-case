@@ -10,6 +10,7 @@ public class ContentRendererFactory {
     public static IContentRenderer getRenderer(ChapterContent contentData) {
         switch (contentData.getType()) {
             case PARA: return (new ParaRenderer()).setContent(contentData);
+            case SECTION: return (new SectionRenderer()).setContent(contentData);
             default: return null;
         }
     }
