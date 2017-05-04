@@ -6,7 +6,13 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
  */
-public interface IContentParser {
-    IContentParser setNode(Node xmlDocument);
-    ChapterContent parse(int currentLevel);
+public abstract class IContentParser {
+    public Node xmlDocument;
+
+    public IContentParser setNode(Node xmlDocument) {
+        this.xmlDocument = xmlDocument;
+        return this;
+    }
+
+    abstract ChapterContent parse(int currentLevel);
 }

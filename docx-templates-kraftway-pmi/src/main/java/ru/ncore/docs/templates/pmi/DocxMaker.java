@@ -15,9 +15,13 @@ import java.util.Map;
 
 public class DocxMaker {
     public void makeDocument(Document document, Path resultPath) throws URISyntaxException, IOException {
-        OutputStream wordDocumentData = new ByteArrayOutputStream(10240);
+        ByteArrayOutputStream header2Data = new ByteArrayOutputStream(10240);
+        renderInfo(document, header2Data,"templates/header2.twig");
+        ByteArrayOutputStream header4Data = new ByteArrayOutputStream(10240);
+        renderInfo(document, header4Data,"templates/header4.twig");
 
-        renderInfo(document, wordDocumentData);
+        OutputStream wordDocumentData = new ByteArrayOutputStream(10240);
+        renderInfo(document, wordDocumentData,"templates/document/title_page.twig");
         renderAnnotation(document, wordDocumentData);
         renderToc(wordDocumentData);
 
@@ -29,10 +33,10 @@ public class DocxMaker {
         JtwigModel model = JtwigModel.newModel();
         model.with("body", wordDocumentData);
 
-        ByteArrayOutputStream xmlDocument = new ByteArrayOutputStream(10240);
+        ByteArrayOutputStream xmlDocument = new ByteArrayOutputStream(102400);
         template.render(model, xmlDocument);
 
-        writeDocx(resultPath, xmlDocument);
+        writeDocx(resultPath, xmlDocument, header2Data, header4Data);
     }
 
     private void renderToc(OutputStream wordDocumentData) {
@@ -72,7 +76,7 @@ public class DocxMaker {
         }
     }
 
-    private void writeDocx(Path resultPath, ByteArrayOutputStream xmlDocument) throws URISyntaxException, IOException {
+    private void writeDocx(Path resultPath, ByteArrayOutputStream xmlDocument, ByteArrayOutputStream header2Data, ByteArrayOutputStream header4Data) throws URISyntaxException, IOException {
         java.net.URL url = this.getClass().getResource("/template.docx");
         Path resPath = Paths.get(url.toURI());
         Files.copy(resPath.toAbsolutePath(), resultPath, StandardCopyOption.REPLACE_EXISTING);
@@ -80,13 +84,14 @@ public class DocxMaker {
         Map<String, String> env = new HashMap<>();
         env.put("create", "true");
         try (FileSystem zipfs = FileSystems.newFileSystem(resultPath, null)) {
-            Path pathInZipfile = zipfs.getPath("/word/document.xml");
-            Files.copy(new ByteArrayInputStream(xmlDocument.toByteArray()), pathInZipfile, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(new ByteArrayInputStream(xmlDocument.toByteArray()), zipfs.getPath("/word/document.xml"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(new ByteArrayInputStream(header2Data.toByteArray()), zipfs.getPath("/word/header2.xml"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(new ByteArrayInputStream(header4Data.toByteArray()), zipfs.getPath("/word/header4.xml"), StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
-    private void renderInfo(Document document, OutputStream wordDocumentData) {
-        JtwigTemplate titlePageTemplate = JtwigTemplate.classpathTemplate("templates/document/title_page.twig");
+    private void renderInfo(Document document, OutputStream wordDocumentData, String template) {
+        JtwigTemplate titlePageTemplate = JtwigTemplate.classpathTemplate(template);
         JtwigModel titlePageModel = JtwigModel.newModel();
         titlePageModel.with("contractnum", document.getInfo().getContractNum());
         titlePageModel.with("title", document.getInfo().getTitle());

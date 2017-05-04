@@ -9,19 +9,19 @@ import java.util.List;
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
  */
-public class ItemizedListParser implements IContentParser {
-    private Node xmlDocument;
+public class ItemizedListParser extends IContentParser {
+    private ChapterContent.Type listType;
+    private ChapterContent.Type itemType;
 
-    @Override
-    public IContentParser setNode(Node xmlDocument) {
-        this.xmlDocument = xmlDocument;
-        return this;
+    public ItemizedListParser(ChapterContent.Type listType, ChapterContent.Type itemType) {
+        this.listType = listType;
+        this.itemType = itemType;
     }
 
     @Override
     public ChapterContent parse(int currentLevel) {
         ChapterContent itemizedList = new ChapterContent();
-        itemizedList.setType(ChapterContent.Type.ITEMLIST);
+        itemizedList.setType(listType);
         itemizedList.setLevel(1);
 
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./d:listitem");
@@ -37,7 +37,7 @@ public class ItemizedListParser implements IContentParser {
 
     private ChapterContent parseItem(Node contentNode) {
         ChapterContent listItem = new ChapterContent();
-        listItem.setType(ChapterContent.Type.ITEMLIST_ITEM);
+        listItem.setType(itemType);
         listItem.setLevel(1);
 
         NodeList nodes = XMLUtils.getNodes(contentNode, "./*");

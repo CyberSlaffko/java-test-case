@@ -18,7 +18,7 @@
         <info>
             <title>Аннотация1</title>
         </info>
-        <para>Бла-бла.</para>
+        <para><?oxy_custom_start type="oxy_content_highlight" color="255,255,0"?><link xlink:href="http://bd-test.it.mvd.ru/">http://bd-test.it.mvd.ru/</link><?oxy_custom_end?> <phrase>ага</phrase> супер.</para>
     </preface>
 
     <chapter>
@@ -28,13 +28,13 @@
 
 
         </title>
-        <section>
+        <section xml:id="test1">
             <title>Состав дистрибутива</title>
 
-            <para>Исходные коды СПО модели сервиса «ИБД-М» располагаются на CD-диске: «RU.35897050.00004-01 12 01. Текст
+            <para>Исходные коды СПО модели сервиса «ИБД-М» <xref linkend="test1" />располагаются на CD-диске: «RU.35897050.00004-01 12 01. Текст
                 программы. Запись на исходном языке».
             </para>
-            <para>В состав дистрибутива входят следующие файлы:
+            <para>
                 <itemizedlist>
                     <listitem>
                         <para>&lt;sources.zip&gt; - архив, содержащий файлы с текстом программы на исходном языке;

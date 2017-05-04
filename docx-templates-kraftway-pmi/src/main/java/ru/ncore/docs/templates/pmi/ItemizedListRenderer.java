@@ -10,13 +10,20 @@ import java.io.OutputStream;
 public class ItemizedListRenderer extends IContentRenderer {
     @Override
     void render(OutputStream wordDocumentData) {
-        String templatePath = "templates/document/itemizedlist_1.twig";
+        String itemizedTemplatePath = "templates/document/itemizedlist_1.twig";
+        String orderedTemplatePath = "templates/document/orderedlist_1.twig";
 
         for(ChapterContent itemList: contentData.getContentList()) {
             if (0 <= itemList.getContentList().size()) {
+                ChapterContent content = itemList.getContentList().get(0);
+
                 ParaRenderer paraRenderer = new ParaRenderer();
-                paraRenderer.setTemplatePath(templatePath);
-                paraRenderer.setContent(itemList.getContentList().get(0));
+                if (ChapterContent.Type.ITEMLIST_ITEM == itemList.getType()) {
+                    paraRenderer.setTemplatePath(itemizedTemplatePath);
+                } else if (ChapterContent.Type.ORDEREDLIST_ITEM == itemList.getType()) {
+                    paraRenderer.setTemplatePath(orderedTemplatePath);
+                }
+                paraRenderer.setContent(content);
                 paraRenderer.render(wordDocumentData);
             }
         }

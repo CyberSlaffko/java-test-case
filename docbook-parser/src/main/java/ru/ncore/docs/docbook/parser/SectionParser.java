@@ -9,18 +9,7 @@ import java.util.List;
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
  */
-public class SectionParser implements IContentParser {
-    private Node xmlDocument;
-
-    public SectionParser() {
-    }
-
-    @Override
-    public IContentParser setNode(Node xmlDocument) {
-        this.xmlDocument = xmlDocument;
-        return this;
-    }
-
+public class SectionParser extends IContentParser {
     @Override
     public ChapterContent parse(int currentLevel) {
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./*");

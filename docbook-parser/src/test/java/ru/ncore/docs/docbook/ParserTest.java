@@ -43,6 +43,11 @@ class ParserTest {
                 () -> assertEquals(1, annotationChapter.getContentList().size())
         );
 
+        assertAll(
+                () -> assertEquals(4, annotationChapter.getContentList().get(0).getContentList().size()),
+                () -> assertEquals("http://bd-test.it.mvd.ru/", annotationChapter.getContentList().get(0).getContentList().get(0).getTitle())
+        );
+
         List<Chapter> chaptersList = parseResult.getChaptersList();
         assertAll(
                 () -> assertEquals(1, chaptersList.size())
