@@ -8,6 +8,8 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
 
+import static ru.ncore.docs.docbook.document.ChapterContent.ChapterType.ANNOTATION;
+
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
  */
@@ -17,7 +19,6 @@ public class AnnotationParser {
     private Document xmlDocument;
 
     public AnnotationParser(Document xmlDocument) {
-
         this.xmlDocument = xmlDocument;
     }
 
@@ -52,7 +53,7 @@ public class AnnotationParser {
             else {
                 IContentParser parser = ContentParserFactory.getParserFor(contentNode);
                 if (parser != null) {
-                    contentList.add(parser.parse(nextLevel));
+                    contentList.add(parser.parse(nextLevel, ANNOTATION));
                 }
             }
         }

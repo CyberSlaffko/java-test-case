@@ -11,13 +11,12 @@ import java.util.List;
  */
 public class ParaParser extends IContentParser {
     @Override
-    public ChapterContent parse(int currentLevel) {
+    public ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
         ChapterContent para = new ChapterContent();
         para.setType(ChapterContent.Type.PARA);
         para.setLevel(currentLevel);
-//        para.setTitle(XMLUtils.getNodeValue(xmlDocument, "./text()"));
+        para.setChapterType(chapterType);
 
-//        NodeList nodes = XMLUtils.getNodes(xmlDocument, "./*");
         List<ChapterContent> contentList = para.getContentList();
         int nextLevel = para.getLevel() + 1;
         NodeList nodes = xmlDocument.getChildNodes();
@@ -26,7 +25,7 @@ public class ParaParser extends IContentParser {
 
             IContentParser parser = ContentParserFactory.getParserFor(contentNode);
             if (parser != null) {
-                contentList.add(parser.parse(nextLevel));
+                contentList.add(parser.parse(nextLevel, chapterType));
             }
         }
 

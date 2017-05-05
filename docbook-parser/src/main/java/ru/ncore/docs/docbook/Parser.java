@@ -2,6 +2,7 @@ package ru.ncore.docs.docbook;
 
 import org.xml.sax.SAXException;
 import ru.ncore.docs.docbook.parser.AnnotationParser;
+import ru.ncore.docs.docbook.parser.AppendixParser;
 import ru.ncore.docs.docbook.parser.ChapterParser;
 import ru.ncore.docs.docbook.parser.DocumentInfoParser;
 
@@ -52,6 +53,7 @@ public class Parser {
         new DocumentInfoParser(xmlDocument).parse(document);
         new AnnotationParser(xmlDocument).parse(document);
         new ChapterParser(xmlDocument).parse(document);
+        new AppendixParser(xmlDocument).parse(document);
     }
 
 }

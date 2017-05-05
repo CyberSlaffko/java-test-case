@@ -14,6 +14,8 @@ public class Document {
     DocumentInfo documentInfo = new DocumentInfo();
     List<Chapter> chaptersList = new ArrayList<>();
 
+    List<Chapter> appendiciesList = new ArrayList<>();
+
     Chapter annotaion;
 
     public enum Type {
@@ -53,4 +55,11 @@ public class Document {
         this.annotaion = annotaion;
     }
 
+    public List<Chapter> getAppendiciesList() {
+        return appendiciesList;
+    }
+
+    public void setAppendiciesList(List<Chapter> appendiciesList) {
+        this.appendiciesList = appendiciesList;
+    }
 }

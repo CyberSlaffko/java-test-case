@@ -36,4 +36,12 @@ public class Chapter {
     public String getUuid() {
         return uuid;
     }
+
+    public void setBookmarkId(String bookmarkId) {
+        content.setBookmarkId(bookmarkId);
+    }
+
+    public String getBookmarkId() {
+        return content.getBookmarkId();
+    }
 }

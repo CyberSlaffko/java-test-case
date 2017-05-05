@@ -21,7 +21,7 @@
         <para><?oxy_custom_start type="oxy_content_highlight" color="255,255,0"?><link xlink:href="http://bd-test.it.mvd.ru/">http://bd-test.it.mvd.ru/</link><?oxy_custom_end?> <phrase>ага</phrase> супер.</para>
     </preface>
 
-    <chapter>
+    <chapter xml:id="test2">
         <title>Название
 
             главы 1

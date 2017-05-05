@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
+import ru.ncore.docs.docbook.parser.MD5Utils;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -55,7 +56,8 @@ class ParserTest {
 
         Chapter chapter = chaptersList.get(0);
         assertAll(
-                () -> assertEquals("Название главы 1", chapter.getTitle())
+                () -> assertEquals("Название главы 1", chapter.getTitle()),
+                () -> assertEquals(MD5Utils.HexMD5ForString("test2"), chapter.getBookmarkId())
         );
 
         List<ChapterContent> contentList = chapter.getContentList();
@@ -64,7 +66,8 @@ class ParserTest {
         ChapterContent firstPara = contentList.get(0);
         assertAll(
                 () -> assertEquals(2, firstPara.getLevel()),
-                () -> assertEquals("Состав дистрибутива", firstPara.getTitle())
+                () -> assertEquals("Состав дистрибутива", firstPara.getTitle()),
+                () -> assertEquals(MD5Utils.HexMD5ForString("test1"), firstPara.getBookmarkId())
         );
     }
 

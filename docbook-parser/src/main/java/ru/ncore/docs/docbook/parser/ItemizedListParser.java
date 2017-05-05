@@ -12,6 +12,7 @@ import java.util.List;
 public class ItemizedListParser extends IContentParser {
     private ChapterContent.Type listType;
     private ChapterContent.Type itemType;
+    private ChapterContent.ChapterType chapterType;
 
     public ItemizedListParser(ChapterContent.Type listType, ChapterContent.Type itemType) {
         this.listType = listType;
@@ -19,9 +20,11 @@ public class ItemizedListParser extends IContentParser {
     }
 
     @Override
-    public ChapterContent parse(int currentLevel) {
+    public ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
+        this.chapterType = chapterType;
         ChapterContent itemizedList = new ChapterContent();
         itemizedList.setType(listType);
+        itemizedList.setChapterType(chapterType);
         itemizedList.setLevel(1);
 
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./d:listitem");
@@ -38,6 +41,7 @@ public class ItemizedListParser extends IContentParser {
     private ChapterContent parseItem(Node contentNode) {
         ChapterContent listItem = new ChapterContent();
         listItem.setType(itemType);
+        listItem.setChapterType(chapterType);
         listItem.setLevel(1);
 
         NodeList nodes = XMLUtils.getNodes(contentNode, "./*");
@@ -47,7 +51,7 @@ public class ItemizedListParser extends IContentParser {
 
             IContentParser parser = ContentParserFactory.getParserFor(node);
             if (parser != null) {
-                listItems.add(parser.parse(1));
+                listItems.add(parser.parse(1, chapterType));
             }
         }
 

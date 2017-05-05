@@ -14,5 +14,5 @@ public abstract class IContentParser {
         return this;
     }
 
-    abstract ChapterContent parse(int currentLevel);
+    abstract ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType);
 }

@@ -11,7 +11,11 @@ import java.util.UUID;
  */
 public class ChapterContent {
     public enum Type {
-        SECTION, PARA, ITEMLIST, ITEMLIST_ITEM, ORDEREDLIST, ORDEREDLIST_ITEM, PHRASE, TEXT, XREF
+        SECTION, PARA, ITEMLIST, ITEMLIST_ITEM, ORDEREDLIST, ORDEREDLIST_ITEM, PHRASE, TEXT, TABLE, PROGRAMLISTING, XREF
+    }
+
+    public enum ChapterType {
+        ANNOTATION, CHAPTER, APPENDIX
     }
 
     private final String uuid;
@@ -19,6 +23,8 @@ public class ChapterContent {
     private String title;
     private int level;
     private Type type;
+
+    private ChapterType chapterType;
     private List<ChapterContent> contentList = new ArrayList<>();
 
     public ChapterContent() {
@@ -58,6 +64,9 @@ public class ChapterContent {
     }
 
     public String getBookmarkId() {
+        if (null == bookmarkId || bookmarkId.isEmpty()) {
+            return uuid;
+        }
         return bookmarkId;
     }
 
@@ -67,5 +76,13 @@ public class ChapterContent {
 
     public boolean isList() {
         return type == Type.ITEMLIST || type == Type.ORDEREDLIST;
+    }
+
+    public ChapterType getChapterType() {
+        return chapterType;
+    }
+
+    public void setChapterType(ChapterType chapterType) {
+        this.chapterType = chapterType;
     }
 }

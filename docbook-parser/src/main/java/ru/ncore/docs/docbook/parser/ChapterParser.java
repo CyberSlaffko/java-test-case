@@ -1,7 +1,5 @@
 package ru.ncore.docs.docbook.parser;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
@@ -11,43 +9,24 @@ import java.util.List;
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
  */
-public class ChapterParser {
-    private org.w3c.dom.Document xmlDocument;
+public class ChapterParser extends ChapterParserStrategy  {
 
     public ChapterParser(org.w3c.dom.Document xmlDocument) {
-        this.xmlDocument = xmlDocument;
+        super(xmlDocument);
     }
 
-    public void parse(Document document) {
-        NodeList nodes = XMLUtils.getNodes(xmlDocument, "/d:book/d:chapter");
-
-        List<Chapter> chaptersList = document.getChaptersList();
-
-        for(int i = 0; i < nodes.getLength(); i++) {
-            chaptersList.add(parseChapter(nodes.item(i)));
-        }
+    @Override
+    protected List<Chapter> getDataList(Document document) {
+        return document.getChaptersList();
     }
 
-    private Chapter parseChapter(Node chapterNode) {
-        Chapter chapter = new Chapter();
+    @Override
+    protected String xpath() {
+        return "/d:book/d:chapter";
+    }
 
-        List<ChapterContent> contentList = chapter.getContentList();
-        int nextLevel = chapter.getLevel() + 1;
-
-        NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
-        for(int i = 0; i < nodes.getLength(); i++) {
-            Node contentNode = nodes.item(i);
-
-            if (contentNode.getNodeName().equals("title")) {
-                chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./text()"));
-            }
-            else {
-                IContentParser parser = ContentParserFactory.getParserFor(contentNode);
-                if (parser != null) {
-                    contentList.add(parser.parse(nextLevel));
-                }
-            }
-        }
-        return chapter;
+    @Override
+    protected ChapterContent.ChapterType getChapterType() {
+        return ChapterContent.ChapterType.CHAPTER;
     }
 }

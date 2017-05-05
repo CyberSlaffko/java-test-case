@@ -29,19 +29,23 @@ public abstract class XMLUtils {
         }
     }
 
-    static public String getNodeValue(Node xmlDocument, String xpath) {
+    static public String getNodeValueNoTrim(Node xmlDocument, String xpath) {
         XPath xPath = getxPath();
         try {
             Node node = ((Node) xPath.evaluate(xpath, xmlDocument, XPathConstants.NODE));
             if (null == node) {
-                return null;
+                return "";
             }
 
-            return node.getNodeValue().trim().replaceAll("\\s+", " ");
+            return node.getNodeValue();
         } catch (XPathExpressionException e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
+    }
+
+    static public String getNodeValue(Node xmlDocument, String xpath) {
+        return getNodeValueNoTrim(xmlDocument, xpath).trim().replaceAll("\\s+", " ");
     }
 
     static public NodeList getNodes(Document xmlDocument, String xpath) {
