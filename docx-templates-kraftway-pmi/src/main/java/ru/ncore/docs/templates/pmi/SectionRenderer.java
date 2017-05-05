@@ -18,7 +18,8 @@ public class SectionRenderer extends IContentRenderer {
         JtwigModel model = JtwigModel.newModel();
 
         model.with("title", contentData.getTitle());
-        model.with("uuid", contentData.getUuid());
+        model.with("styleId", getStyleId(contentData.getLevel(), contentData.getChapterType()));
+        model.with("uuid", contentData.getBookmarkId());
 
         template.render(model, wordDocumentData);
 
@@ -28,5 +29,25 @@ public class SectionRenderer extends IContentRenderer {
                 renderer.render(wordDocumentData);
             }
         }
+    }
+
+    private String getStyleId(int level, ChapterContent.ChapterType chapterType) {
+        if (chapterType == ChapterContent.ChapterType.CHAPTER) {
+            switch (level) {
+                case 2: return "24";
+                case 3: return "33";
+                case 4: return "40";
+                case 5: return "50";
+                default: return "6";
+            }
+        } else if (chapterType == ChapterContent.ChapterType.APPENDIX) {
+            switch(level) {
+                case 2: return "22";
+                case 3: return "30";
+                case 4: return "4";
+                default: return "5";
+            }
+        }
+        return "24";
     }
 }

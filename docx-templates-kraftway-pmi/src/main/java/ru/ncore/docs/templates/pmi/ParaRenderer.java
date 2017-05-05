@@ -15,40 +15,34 @@ public class ParaRenderer extends IContentRenderer {
 
     @Override
     public void render(OutputStream wordDocumentData) {
-        if (!isListOnly()) {
-            OutputStream innerData = new ByteArrayOutputStream(1024);
-            boolean rendered = innerParaRender(innerData, contentData.getTitle(), contentData.getUuid(), templateFor(contentData.getType()));
+        OutputStream innerData = new ByteArrayOutputStream(1024);
+        boolean rendered = innerParaRender(innerData, contentData.getTitle(), contentData.getUuid(), templateFor(contentData.getType()));
 
-            for(ChapterContent innerContent : contentData.getContentList()) {
-                if (innerContent.isList()) {
-                    break;
+        for(ChapterContent innerContent : contentData.getContentList()) {
+            if (innerContent.isList()) {
+                closePara(wordDocumentData, innerData, rendered);
+                innerData = new ByteArrayOutputStream(1024);
+                rendered = false;
+
+                IContentRenderer renderer = ContentRendererFactory.getRenderer(innerContent);
+                if (null != renderer) {
+                    renderer.render(wordDocumentData);
                 }
-
-                rendered = innerParaRender(innerData, innerContent.getTitle(), innerContent.getUuid(), templateFor(innerContent.getType())) || rendered;
             }
 
-            if (rendered) {
-                JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
-                JtwigModel model = JtwigModel.newModel();
-                model.with("body", innerData);
-
-                template.render(model, wordDocumentData);
-            }
+            rendered = innerParaRender(innerData, innerContent.getTitle(), innerContent.getUuid(), templateFor(innerContent.getType())) || rendered;
         }
 
+        closePara(wordDocumentData, innerData, rendered);
+    }
 
-        for (ChapterContent content : contentData.getContentList()) {
-            switch (content.getType()) {
-                case ORDEREDLIST:
-                case ITEMLIST: {
-                    IContentRenderer ilistRendere = new ItemizedListRenderer();
-                    ilistRendere.setContent(content);
-                    ilistRendere.render(wordDocumentData);
-                    break;
-                }
-                default:
-                    break;
-            }
+    private void closePara(OutputStream wordDocumentData, OutputStream innerData, boolean rendered) {
+        if (rendered) {
+            JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
+            JtwigModel model = JtwigModel.newModel();
+            model.with("body", innerData);
+
+            template.render(model, wordDocumentData);
         }
     }
 

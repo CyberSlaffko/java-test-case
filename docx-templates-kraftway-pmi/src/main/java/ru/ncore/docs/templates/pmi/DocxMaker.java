@@ -29,6 +29,10 @@ public class DocxMaker {
             renderChapter(wordDocumentData, chapter, "templates/document/chapter_title.twig");
         }
 
+        for (Chapter chapter : document.getAppendiciesList()) {
+            renderChapter(wordDocumentData, chapter, "templates/document/appendix_title.twig");
+        }
+
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/document.twig");
         JtwigModel model = JtwigModel.newModel();
         model.with("body", wordDocumentData);
