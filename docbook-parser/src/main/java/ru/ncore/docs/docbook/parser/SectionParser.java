@@ -8,6 +8,8 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
 
+import static ru.ncore.docs.docbook.document.ChapterContent.Type.SECTION;
+
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
  */
@@ -17,7 +19,7 @@ public class SectionParser extends IContentParser {
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./*");
 
         ChapterContent section = new ChapterContent();
-        section.setType(ChapterContent.Type.SECTION);
+        section.setType(SECTION);
         section.setLevel(currentLevel);
         section.setChapterType(chapterType);
         List<ChapterContent> contentList = section.getContentList();
@@ -25,8 +27,9 @@ public class SectionParser extends IContentParser {
 
         Attr attr = ((DeferredElementNSImpl) xmlDocument).getAttributeNode("xml:id");
         if (null != attr) {
-            String xrefLink = attr.getValue();
-            section.setBookmarkId(MD5Utils.HexMD5ForString(xrefLink));
+            String xrefLink = MD5Utils.HexMD5ForString(attr.getValue());
+            section.setBookmarkId(xrefLink);
+            document.addLink(xrefLink, SECTION);
         }
 
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -35,7 +38,7 @@ public class SectionParser extends IContentParser {
             if (contentNode.getNodeName().equals("title")) {
                 section.setTitle(XMLUtils.getNodeValue(contentNode, "./text()"));
             } else {
-                IContentParser parser = ContentParserFactory.getParserFor(contentNode);
+                IContentParser parser = ContentParserFactory.getParserFor(contentNode, document);
                 if (parser != null) {
                     contentList.add(parser.parse(nextLevel, chapterType));
                 }

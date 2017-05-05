@@ -17,12 +17,14 @@ public class AnnotationParser {
     private static final String ANNOTATION_TITLE = "Аннотация";
     private static final int ANNOTATION_INDEX = 0;
     private Document xmlDocument;
+    private ru.ncore.docs.docbook.Document document;
 
     public AnnotationParser(Document xmlDocument) {
         this.xmlDocument = xmlDocument;
     }
 
     public void parse(ru.ncore.docs.docbook.Document document) {
+        this.document = document;
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "/d:book/d:preface");
 
         if (0 == nodes.getLength()) {
@@ -51,7 +53,7 @@ public class AnnotationParser {
                 chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./d:title/text()"));
             }
             else {
-                IContentParser parser = ContentParserFactory.getParserFor(contentNode);
+                IContentParser parser = ContentParserFactory.getParserFor(contentNode, document);
                 if (parser != null) {
                     contentList.add(parser.parse(nextLevel, ANNOTATION));
                 }

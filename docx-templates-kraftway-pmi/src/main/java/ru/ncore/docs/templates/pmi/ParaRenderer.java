@@ -6,6 +6,7 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
@@ -16,21 +17,22 @@ public class ParaRenderer extends IContentRenderer {
     @Override
     public void render(OutputStream wordDocumentData) {
         OutputStream innerData = new ByteArrayOutputStream(1024);
-        boolean rendered = innerParaRender(innerData, contentData.getTitle(), contentData.getUuid(), templateFor(contentData.getType()));
+        boolean rendered = innerParaRender(innerData, contentData.getTitle(), contentData.getUuid(), templateFor(contentData));
 
         for(ChapterContent innerContent : contentData.getContentList()) {
-            if (innerContent.isList()) {
+            if (innerContent.isList() || innerContent.isTable()) {
                 closePara(wordDocumentData, innerData, rendered);
                 innerData = new ByteArrayOutputStream(1024);
                 rendered = false;
 
-                IContentRenderer renderer = ContentRendererFactory.getRenderer(innerContent);
+                IContentRenderer renderer = ContentRendererFactory.getRenderer(innerContent, document);
                 if (null != renderer) {
                     renderer.render(wordDocumentData);
                 }
             }
-
-            rendered = innerParaRender(innerData, innerContent.getTitle(), innerContent.getUuid(), templateFor(innerContent.getType())) || rendered;
+            else {
+                rendered = innerParaRender(innerData, innerContent.getTitle(), innerContent.getUuid(), templateFor(innerContent)) || rendered;
+            }
         }
 
         closePara(wordDocumentData, innerData, rendered);
@@ -46,14 +48,20 @@ public class ParaRenderer extends IContentRenderer {
         }
     }
 
-    private String templateFor(ChapterContent.Type type) {
-        switch (type) {
+    private String templateFor(ChapterContent type) {
+        switch (type.getType()) {
             case PARA:
             case PHRASE:
             case TEXT:
                 return "templates/document/para_r.twig";
             case XREF:
-                return "templates/document/ref.twig";
+                if (document.getLinkType(type.getTitle()) == ChapterContent.Type.SECTION) {
+                    return "templates/document/ref.twig";
+                } else {
+                    return "templates/document/ref_obj.twig";
+                }
+            default:
+                System.out.printf("[W004] unknown inpara %s", type.getType());
         }
         return null;
     }
@@ -75,11 +83,5 @@ public class ParaRenderer extends IContentRenderer {
 
     public void setTemplatePath(String templatePath) {
         this.templatePath = templatePath;
-    }
-
-    private boolean isListOnly() {
-        boolean emptyPara = contentData.getTitle() == null || contentData.getTitle().isEmpty();
-        boolean firstChildList = contentData.getContentList().size() > 0 && contentData.getContentList().get(0).isList();
-        return emptyPara && firstChildList;
     }
 }

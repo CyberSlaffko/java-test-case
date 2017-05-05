@@ -49,7 +49,7 @@ public class ItemizedListParser extends IContentParser {
         for(int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
 
-            IContentParser parser = ContentParserFactory.getParserFor(node);
+            IContentParser parser = ContentParserFactory.getParserFor(node, document);
             if (parser != null) {
                 listItems.add(parser.parse(1, chapterType));
             }

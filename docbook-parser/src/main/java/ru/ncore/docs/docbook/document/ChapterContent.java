@@ -78,6 +78,10 @@ public class ChapterContent {
         return type == Type.ITEMLIST || type == Type.ORDEREDLIST;
     }
 
+    public boolean isTable() {
+        return type == Type.TABLE;
+    }
+
     public ChapterType getChapterType() {
         return chapterType;
     }

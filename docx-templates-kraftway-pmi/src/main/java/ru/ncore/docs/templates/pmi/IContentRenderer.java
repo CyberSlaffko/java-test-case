@@ -1,5 +1,6 @@
 package ru.ncore.docs.templates.pmi;
 
+import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.io.OutputStream;
@@ -9,11 +10,17 @@ import java.io.OutputStream;
  */
 public abstract class IContentRenderer {
     protected ChapterContent contentData;
+    protected Document document;
 
     abstract void render(OutputStream wordDocumentData);
 
     IContentRenderer setContent(ChapterContent contentData) {
         this.contentData = contentData;
+        return this;
+    }
+
+    public IContentRenderer setDocument(Document document) {
+        this.document = document;
         return this;
     }
 }

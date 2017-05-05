@@ -23,7 +23,7 @@ public class ParaParser extends IContentParser {
         for(int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 
-            IContentParser parser = ContentParserFactory.getParserFor(contentNode);
+            IContentParser parser = ContentParserFactory.getParserFor(contentNode, document);
             if (parser != null) {
                 contentList.add(parser.parse(nextLevel, chapterType));
             }

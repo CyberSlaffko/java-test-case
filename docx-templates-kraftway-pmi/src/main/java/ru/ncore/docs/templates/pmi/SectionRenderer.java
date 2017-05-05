@@ -24,7 +24,7 @@ public class SectionRenderer extends IContentRenderer {
         template.render(model, wordDocumentData);
 
         for(ChapterContent subContent : contentData.getContentList()) {
-            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent);
+            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document);
             if (null != renderer) {
                 renderer.render(wordDocumentData);
             }

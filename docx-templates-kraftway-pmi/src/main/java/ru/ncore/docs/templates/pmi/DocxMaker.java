@@ -26,11 +26,11 @@ public class DocxMaker {
         renderToc(wordDocumentData);
 
         for (Chapter chapter : document.getChaptersList()) {
-            renderChapter(wordDocumentData, chapter, "templates/document/chapter_title.twig");
+            renderChapter(document, wordDocumentData, chapter, "templates/document/chapter_title.twig");
         }
 
         for (Chapter chapter : document.getAppendiciesList()) {
-            renderChapter(wordDocumentData, chapter, "templates/document/appendix_title.twig");
+            renderChapter(document, wordDocumentData, chapter, "templates/document/appendix_title.twig");
         }
 
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/document.twig");
@@ -56,10 +56,10 @@ public class DocxMaker {
             return;
         }
 
-        renderChapter(wordDocumentData, annotation, "templates/document/annotation_title.twig");
+        renderChapter(document, wordDocumentData, annotation, "templates/document/annotation_title.twig");
     }
 
-    private void renderChapter(OutputStream wordDocumentData, Chapter chapter, String templatePath) {
+    private void renderChapter(Document document, OutputStream wordDocumentData, Chapter chapter, String templatePath) {
         JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 
@@ -68,12 +68,12 @@ public class DocxMaker {
 
         template.render(model, wordDocumentData);
 
-        renderChapterContent(chapter.getContentList(), wordDocumentData);
+        renderChapterContent(document, chapter.getContentList(), wordDocumentData);
     }
 
-    private void renderChapterContent(List<ChapterContent> contentList, OutputStream wordDocumentData) {
+    private void renderChapterContent(Document document, List<ChapterContent> contentList, OutputStream wordDocumentData) {
         for(ChapterContent contentData : contentList) {
-            IContentRenderer renderer = ContentRendererFactory.getRenderer(contentData);
+            IContentRenderer renderer = ContentRendererFactory.getRenderer(contentData, document);
             if (null != renderer) {
                 renderer.render(wordDocumentData);
             }

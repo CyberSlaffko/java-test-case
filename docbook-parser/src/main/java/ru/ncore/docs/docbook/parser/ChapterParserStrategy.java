@@ -10,18 +10,22 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
 
+import static ru.ncore.docs.docbook.document.ChapterContent.Type.SECTION;
+
 /**
  * Created by Вячеслав Молоков on 05.05.2017.
  */
 public abstract class ChapterParserStrategy {
     private org.w3c.dom.Document xmlDocument;
     private ChapterContent.ChapterType chapterType;
+    private Document document;
 
     public ChapterParserStrategy(org.w3c.dom.Document xmlDocument) {
         this.xmlDocument = xmlDocument;
     }
 
     public void parse(Document document) {
+        this.document = document;
         NodeList nodes = XMLUtils.getNodes(xmlDocument, xpath());
 
         List<Chapter> chaptersList = getDataList(document);
@@ -43,8 +47,9 @@ public abstract class ChapterParserStrategy {
 
         Attr attr = ((DeferredElementNSImpl) chapterNode).getAttributeNode("xml:id");
         if (null != attr) {
-            String xrefLink = attr.getValue();
-            chapter.setBookmarkId(MD5Utils.HexMD5ForString(xrefLink));
+            String xrefLink = MD5Utils.HexMD5ForString(attr.getValue());
+            chapter.setBookmarkId(xrefLink);
+            document.addLink(xrefLink, SECTION);
         }
 
         NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
@@ -55,7 +60,7 @@ public abstract class ChapterParserStrategy {
                 chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./text()"));
             }
             else {
-                IContentParser parser = ContentParserFactory.getParserFor(contentNode);
+                IContentParser parser = ContentParserFactory.getParserFor(contentNode, document);
                 if (parser != null) {
                     contentList.add(parser.parse(nextLevel, getChapterType()));
                 }

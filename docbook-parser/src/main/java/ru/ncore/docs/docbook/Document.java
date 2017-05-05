@@ -1,10 +1,13 @@
 package ru.ncore.docs.docbook;
 
 import ru.ncore.docs.docbook.document.Chapter;
+import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
@@ -15,6 +18,8 @@ public class Document {
     List<Chapter> chaptersList = new ArrayList<>();
 
     List<Chapter> appendiciesList = new ArrayList<>();
+
+    Map<String, ChapterContent.Type> links = new HashMap<>();
 
     Chapter annotaion;
 
@@ -61,5 +66,13 @@ public class Document {
 
     public void setAppendiciesList(List<Chapter> appendiciesList) {
         this.appendiciesList = appendiciesList;
+    }
+
+    public ChapterContent.Type getLinkType(String xref) {
+        return links.get(xref);
+    }
+
+    public void addLink(String xref, ChapterContent.Type type) {
+        links.put(xref, type);
     }
 }
