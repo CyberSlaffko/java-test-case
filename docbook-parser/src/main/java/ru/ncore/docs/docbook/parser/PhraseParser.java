@@ -1,18 +1,22 @@
 package ru.ncore.docs.docbook.parser;
 
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.docbook.parser.algorithms.LeafContentParserAlgorithm;
+import ru.ncore.docs.docbook.utils.XMLUtils;
+
+import static ru.ncore.docs.docbook.document.ChapterContent.Type.PHRASE;
 
 /**
  * Created by Вячеслав Молоков on 05.05.2017.
  */
-public class PhraseParser extends IContentParser {
+public class PhraseParser extends LeafContentParserAlgorithm {
     @Override
-    public ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
-        ChapterContent para = new ChapterContent();
-        para.setType(ChapterContent.Type.PHRASE);
-        para.setLevel(currentLevel);
-        para.setChapterType(chapterType);
-        para.setTitle(XMLUtils.getNodeValue(xmlDocument, "./text()"));
-        return para;
+    protected String getTitle() {
+        return XMLUtils.getNodeValue(xmlDocument, "./text()");
+    }
+
+    @Override
+    protected ChapterContent.Type getType() {
+        return PHRASE;
     }
 }

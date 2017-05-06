@@ -1,0 +1,13 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.openxmlformats.org/package/2006/relationships" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="Relationships" type="rel:RelationshipsType" xmlns:rel="http://schemas.openxmlformats.org/package/2006/relationships"/>
+    <xs:complexType name="RelationshipType">
+        <xs:attribute type="xs:string" name="Id" use="optional"/>
+        <xs:attribute type="xs:string" name="Target" use="optional"/>
+        <xs:attribute type="xs:string" name="Type" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="RelationshipsType">
+        <xs:sequence>
+            <xs:element type="rel:RelationshipType" name="Relationship" maxOccurs="unbounded" minOccurs="0" xmlns:rel="http://schemas.openxmlformats.org/package/2006/relationships"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

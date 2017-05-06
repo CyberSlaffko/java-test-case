@@ -3,6 +3,7 @@ package ru.ncore.docs.docbook.parser;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class ItemizedListParser extends IContentParser {
 
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./d:listitem");
         List<ChapterContent> listItems = itemizedList.getContentList();
-        for(int i = 0; i < nodes.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 
             listItems.add(parseItem(contentNode));
@@ -46,7 +47,7 @@ public class ItemizedListParser extends IContentParser {
 
         NodeList nodes = XMLUtils.getNodes(contentNode, "./*");
         List<ChapterContent> listItems = listItem.getContentList();
-        for(int i = 0; i < nodes.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             Node node = nodes.item(i);
 
             IContentParser parser = ContentParserFactory.getParserFor(node, document);

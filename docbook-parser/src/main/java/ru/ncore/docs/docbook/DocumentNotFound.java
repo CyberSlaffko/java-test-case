@@ -1,7 +1,5 @@
 package ru.ncore.docs.docbook;
 
-import ru.ncore.docs.docbook.Document;
-
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
  */

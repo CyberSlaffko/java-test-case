@@ -15,16 +15,6 @@ public class DocumentInfo {
     public DocumentInfo() {
     }
 
-    public DocumentInfo(String title, String titleAbbrev, String productName, String subTitle, String contractNum, String issueNum, String pubDate) {
-        this.title = title;
-        this.titleAbbrev = titleAbbrev;
-        this.productName = productName;
-        this.subTitle = subTitle;
-        this.contractNum = contractNum;
-        this.issueNum = issueNum;
-        this.pubDate = pubDate;
-    }
-
     public String getTitle() {
         return title;
     }

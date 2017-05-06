@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class AnnotationParser {
             annotation.setTitle(ANNOTATION_TITLE);
         }
 
-        document.setAnnotaion(annotation);
+        document.setAnnotation(annotation);
     }
 
     private ChapterContent parseChapter(Node chapterNode) {
@@ -45,13 +46,12 @@ public class AnnotationParser {
         List<ChapterContent> contentList = chapter.getContentList();
         int nextLevel = chapter.getLevel() + 1;
 
-        for(int i = 0; i < nodes.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 
             if (contentNode.getNodeName().equals("info")) {
-                chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./d:title/text()"));
-            }
-            else {
+                chapter.setTitle(XMLUtils.getNodeValue(contentNode, "./d:title/text()"));
+            } else {
                 IContentParser parser = ContentParserFactory.getParserFor(contentNode, document);
                 if (parser != null) {
                     contentList.add(parser.parse(nextLevel, ANNOTATION));

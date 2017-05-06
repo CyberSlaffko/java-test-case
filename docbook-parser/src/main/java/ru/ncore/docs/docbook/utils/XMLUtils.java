@@ -1,4 +1,4 @@
-package ru.ncore.docs.docbook.parser;
+package ru.ncore.docs.docbook.utils;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

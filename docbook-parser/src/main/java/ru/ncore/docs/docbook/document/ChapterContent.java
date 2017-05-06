@@ -1,57 +1,13 @@
 package ru.ncore.docs.docbook.document;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Содержимое документа (кроме
- *
  */
 public class ChapterContent {
-    /**
-     * Типы содержимого документа
-     */
-    public enum Type {
-        ANNOTATION, CHAPTER, APPENDIX,
-        /**
-         * Раздел внутри Аннотации, Главы или Приложения
-         */
-        SECTION,
-
-        /**
-         * Параграф
-         */
-        PARA,
-
-        // Списки
-        ITEMLIST, // Ненумерованный список
-        ITEMLIST_ITEM, // Элемент ненумерованного списка
-        ORDEREDLIST, // Нумерованный список
-        ORDEREDLIST_ITEM, // Элемент нумерованного списка
-
-
-        PHRASE, // Фраза (обычно не разрываемая на несколько строк)
-        TEXT, // Текст в абзаце или ячееке таблицы
-        XREF, // Ссылка на другой
-
-        // Таблица
-        TABLE, // Таблица
-
-
-        PROGRAMLISTING,
-
-        FIGURE,
-
-        TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL
-    }
-
-    public enum ChapterType {
-        ANNOTATION, CHAPTER, APPENDIX
-    }
-
     private final String uuid;
     private String bookmarkId;
     private String title;
@@ -59,7 +15,6 @@ public class ChapterContent {
     private Type type;
     private ChapterType chapterType;
     private List<ChapterContent> contentList = new ArrayList<>();
-
     public ChapterContent() {
         uuid = UUID.randomUUID().toString();
     }
@@ -121,5 +76,53 @@ public class ChapterContent {
 
     public void setChapterType(ChapterType chapterType) {
         this.chapterType = chapterType;
+    }
+
+    public boolean isImage() {
+        return type == Type.MEDIAOBJECT;
+    }
+
+    /**
+     * Типы содержимого документа
+     */
+    public enum Type {
+        ANNOTATION, CHAPTER, APPENDIX,
+        /**
+         * Раздел внутри Аннотации, Главы или Приложения
+         */
+        SECTION,
+
+        /**
+         * Параграф
+         */
+        PARA,
+
+        // Списки
+        ITEMLIST, // Ненумерованный список
+        ITEMLIST_ITEM, // Элемент ненумерованного списка
+        ORDEREDLIST, // Нумерованный список
+        ORDEREDLIST_ITEM, // Элемент нумерованного списка
+
+
+        PHRASE, // Фраза (обычно не разрываемая на несколько строк)
+        TEXT, // Текст в абзаце или ячееке таблицы
+        XREF, // Ссылка на другой
+
+        // Таблица
+        TABLE, // Таблица
+
+
+        PROGRAMLISTING,
+
+        FIGURE,
+        MEDIAOBJECT,
+        IMAGEOBJECT,
+        IMAGEDATA,
+
+        TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL
+    }
+
+    public enum ChapterType {
+        ANNOTATION, CHAPTER, APPENDIX
     }
 }

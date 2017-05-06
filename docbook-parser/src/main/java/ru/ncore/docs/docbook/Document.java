@@ -16,14 +16,13 @@ public class Document {
     DocumentInfo documentInfo = new DocumentInfo();
     List<ChapterContent> chaptersList = new ArrayList<>();
 
-    List<ChapterContent> appendiciesList = new ArrayList<>();
+    List<ChapterContent> appendicesList = new ArrayList<>();
+    List<String> images = new ArrayList<>();
+    private Map<String, ChapterContent.Type> links = new HashMap<>();
+    private ChapterContent annotation;
 
-    Map<String, ChapterContent.Type> links = new HashMap<>();
-
-    ChapterContent annotaion;
-
-    public enum Type {
-        BOOK, ERROR
+    public List<String> getImages() {
+        return images;
     }
 
     /**
@@ -51,20 +50,20 @@ public class Document {
         return chaptersList;
     }
 
-    public ChapterContent getAnnotaion() {
-        return annotaion;
+    public ChapterContent getAnnotation() {
+        return annotation;
     }
 
-    public void setAnnotaion(ChapterContent annotaion) {
-        this.annotaion = annotaion;
+    public void setAnnotation(ChapterContent annotation) {
+        this.annotation = annotation;
     }
 
-    public List<ChapterContent> getAppendiciesList() {
-        return appendiciesList;
+    public List<ChapterContent> getAppendicesList() {
+        return appendicesList;
     }
 
-    public void setAppendiciesList(List<ChapterContent> appendiciesList) {
-        this.appendiciesList = appendiciesList;
+    public void setAppendicesList(List<ChapterContent> appendicesList) {
+        this.appendicesList = appendicesList;
     }
 
     public ChapterContent.Type getLinkType(String xref) {
@@ -73,5 +72,13 @@ public class Document {
 
     public void addLink(String xref, ChapterContent.Type type) {
         links.put(xref, type);
+    }
+
+    public void addImage(String xrefLink) {
+        images.add(xrefLink);
+    }
+
+    public enum Type {
+        BOOK, ERROR
     }
 }

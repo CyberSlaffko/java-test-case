@@ -28,7 +28,7 @@ public class DocxMaker {
             renderChapter(document, wordDocumentData, chapter, "templates/document/chapter_title.twig");
         }
 
-        for (ChapterContent chapter : document.getAppendiciesList()) {
+        for (ChapterContent chapter : document.getAppendicesList()) {
             renderChapter(document, wordDocumentData, chapter, "templates/document/appendix_title.twig");
         }
 
@@ -50,7 +50,7 @@ public class DocxMaker {
     }
 
     private void renderAnnotation(Document document, OutputStream wordDocumentData) {
-        ChapterContent annotation = document.getAnnotaion();
+        ChapterContent annotation = document.getAnnotation();
         if (null == annotation) {
             return;
         }

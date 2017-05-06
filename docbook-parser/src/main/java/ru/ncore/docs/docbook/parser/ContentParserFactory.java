@@ -1,19 +1,20 @@
 package ru.ncore.docs.docbook.parser;
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
-import org.w3c.dom.Attr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import ru.ncore.docs.docbook.Document;
-import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.docbook.parser.algorithms.LeafContentParserAlgorithm;
+import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import static ru.ncore.docs.docbook.document.ChapterContent.Type;
-import static ru.ncore.docs.docbook.document.ChapterContent.Type.SECTION;
-import static ru.ncore.docs.docbook.document.ChapterContent.Type.TABLE;
+import static ru.ncore.docs.docbook.document.ChapterContent.Type.*;
 
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
  */
 public class ContentParserFactory {
+    final static Logger logger = LoggerFactory.getLogger(ContentParserFactory.class);
 
     public static IContentParser getParserFor(Node contentNode, Document document) {
         IContentParser iContentParser = __getParserFor(contentNode, document);
@@ -40,7 +41,13 @@ public class ContentParserFactory {
             case "programlisting":
                 return new ProgramListingParser();
             case "para":
-                return new ParaParser();
+                return new ObjectParser(PARA);
+            case "mediaobject":
+                return new ObjectParser(MEDIAOBJECT);
+            case "imageobject":
+                return new ObjectParser(IMAGEOBJECT);
+            case "imagedata":
+                return new ImageDataParser();
             case "variablelist":
                 return new ItemizedListParser(Type.ITEMLIST, Type.ITEMLIST_ITEM);
             case "orderedlist":
@@ -55,41 +62,21 @@ public class ContentParserFactory {
             case "phrase":
                 return new PhraseParser();
             default: {
-                System.out.printf("[W001] Unknown tag: %s\n", contentNode.getNodeName());
+                logger.warn(String.format("Unknown tag: %s", contentNode.getNodeName()));
                 return null;
             }
         }
     }
 
-    private static class ProgramListingParser extends IContentParser {
+    private static class ProgramListingParser extends LeafContentParserAlgorithm {
         @Override
-        ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
-            ChapterContent para = new ChapterContent();
-            para.setType(ChapterContent.Type.PROGRAMLISTING);
-            para.setLevel(currentLevel);
-            para.setChapterType(chapterType);
-            para.setTitle(XMLUtils.getNodeValueNoTrim(xmlDocument, "./text()"));
-            return para;
+        protected String getTitle() {
+            return XMLUtils.getNodeValueNoTrim(xmlDocument, "./text()");
+        }
+
+        @Override
+        protected Type getType() {
+            return PROGRAMLISTING;
         }
     }
-
-    private static class TableParser extends IContentParser {
-            @Override
-            ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
-                ChapterContent para = new ChapterContent();
-                para.setType(Type.TABLE);
-                para.setChapterType(chapterType);
-                para.setLevel(currentLevel);
-                para.setTitle( XMLUtils.getNodeValue(xmlDocument, "./d:title/text()"));
-
-                Attr attr = ((DeferredElementNSImpl) xmlDocument).getAttributeNode("xml:id");
-                if (null != attr) {
-                    String xrefLink = MD5Utils.HexMD5ForString(attr.getValue());
-                    para.setBookmarkId(xrefLink);
-                    document.addLink(xrefLink, TABLE);
-                }
-
-                return para;
-            }
-        }
 }

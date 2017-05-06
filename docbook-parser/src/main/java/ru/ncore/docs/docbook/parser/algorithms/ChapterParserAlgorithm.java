@@ -1,4 +1,4 @@
-package ru.ncore.docs.docbook.parser;
+package ru.ncore.docs.docbook.parser.algorithms;
 
 import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
 import org.w3c.dom.Attr;
@@ -6,20 +6,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.docbook.parser.ContentParserFactory;
+import ru.ncore.docs.docbook.parser.IContentParser;
+import ru.ncore.docs.docbook.utils.MD5Utils;
+import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import java.util.List;
-
-import static ru.ncore.docs.docbook.document.ChapterContent.Type.SECTION;
 
 /**
  * Created by Вячеслав Молоков on 05.05.2017.
  */
-public abstract class ChapterParserStrategy {
+public abstract class ChapterParserAlgorithm {
     private org.w3c.dom.Document xmlDocument;
-    private ChapterContent.ChapterType chapterType;
     private Document document;
 
-    public ChapterParserStrategy(org.w3c.dom.Document xmlDocument) {
+    public ChapterParserAlgorithm(org.w3c.dom.Document xmlDocument) {
         this.xmlDocument = xmlDocument;
     }
 
@@ -29,7 +30,7 @@ public abstract class ChapterParserStrategy {
 
         List<ChapterContent> chaptersList = getDataList(document);
 
-        for(int i = 0; i < nodes.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             chaptersList.add(parseChapter(nodes.item(i)));
         }
     }
@@ -53,13 +54,12 @@ public abstract class ChapterParserStrategy {
         }
 
         NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
-        for(int i = 0; i < nodes.getLength(); i++) {
+        for (int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 
             if (contentNode.getNodeName().equals("title")) {
-                chapter.setTitle( XMLUtils.getNodeValue(contentNode, "./text()"));
-            }
-            else {
+                chapter.setTitle(XMLUtils.getNodeValue(contentNode, "./text()"));
+            } else {
                 IContentParser parser = ContentParserFactory.getParserFor(contentNode, document);
                 if (parser != null) {
                     contentList.add(parser.parse(nextLevel, getChapterType()));

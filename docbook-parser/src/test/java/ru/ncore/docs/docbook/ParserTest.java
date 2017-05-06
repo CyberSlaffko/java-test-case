@@ -3,7 +3,7 @@ package ru.ncore.docs.docbook;
 import org.junit.jupiter.api.Test;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
-import ru.ncore.docs.docbook.parser.MD5Utils;
+import ru.ncore.docs.docbook.utils.MD5Utils;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -35,7 +35,7 @@ class ParserTest {
         DocumentInfo info = parseResult.getInfo();
         checkDocumentInfo(info);
 
-        ChapterContent annotationChapter = parseResult.getAnnotaion();
+        ChapterContent annotationChapter = parseResult.getAnnotation();
         assertNotNull(annotationChapter);
 
         assertAll(

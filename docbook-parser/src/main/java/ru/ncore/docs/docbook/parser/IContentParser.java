@@ -16,7 +16,7 @@ public abstract class IContentParser {
         return this;
     }
 
-    abstract ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType);
+    abstract public ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType);
 
     public IContentParser setDocument(Document document) {
         this.document = document;

@@ -2,13 +2,14 @@ package ru.ncore.docs.templates.pmi.renderers;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.ContentRendererFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.Objects;
 
 import static ru.ncore.docs.docbook.document.ChapterContent.Type.XREF;
 
@@ -16,6 +17,7 @@ import static ru.ncore.docs.docbook.document.ChapterContent.Type.XREF;
  * Created by Вячеслав Молоков on 03.05.2017.
  */
 public class ParaRenderer extends IContentRenderer {
+    final static Logger logger = LoggerFactory.getLogger(ParaRenderer.class);
     private String templatePath = "templates/document/para.twig";
 
     @Override
@@ -24,7 +26,7 @@ public class ParaRenderer extends IContentRenderer {
         boolean rendered = innerParaRender(innerData, contentData, templateFor(contentData));
 
         for(ChapterContent innerContent : contentData.getContentList()) {
-            if (innerContent.isList() || innerContent.isTable()) {
+            if (innerContent.isList() || innerContent.isTable() || innerContent.isImage()) {
                 closePara(wordDocumentData, innerData, rendered);
                 innerData = new ByteArrayOutputStream(1024);
                 rendered = false;
@@ -65,7 +67,7 @@ public class ParaRenderer extends IContentRenderer {
                     return "templates/document/ref_obj.twig";
                 }
             default:
-                System.out.printf("[W004] unknown inpara %s", type.getType());
+                logger.warn(String.format("Unknown inline element %s", type.getType()));
         }
         return null;
     }
@@ -87,6 +89,7 @@ public class ParaRenderer extends IContentRenderer {
                         text = "рис. ";
                         break;
                     default:
+                        logger.warn(String.format("Unknown XRef type %s", content.getType()));
                         text = " ";
                         break;
                 }

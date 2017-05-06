@@ -1,5 +1,7 @@
 package ru.ncore.docs.docbook;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import ru.ncore.docs.docbook.parser.AnnotationParser;
 import ru.ncore.docs.docbook.parser.AppendixParser;
@@ -19,10 +21,13 @@ import java.io.IOException;
  * Created by Вячеслав Молоков on 29.04.2017.
  */
 public class Parser {
+    final static Logger logger = LoggerFactory.getLogger(Parser.class);
+
     Document document;
     org.w3c.dom.Document xmlDocument;
 
     public Document parse(String fileName) {
+        logger.debug(String.format("Parsing file: %s", fileName));
         try {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(this.getClass().getResource("/xsd/docbook.xsd"));
@@ -40,11 +45,11 @@ public class Parser {
 
             return document;
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            logger.error("Something went wrong", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Something went wrong", e);
         } catch (SAXException e) {
-            e.printStackTrace();
+            logger.error("Something went wrong", e);
         }
         return new DocumentNotFound();
     }

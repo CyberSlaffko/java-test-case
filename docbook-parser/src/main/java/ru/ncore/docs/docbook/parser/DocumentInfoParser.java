@@ -2,6 +2,7 @@ package ru.ncore.docs.docbook.parser;
 
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.DocumentInfo;
+import ru.ncore.docs.docbook.utils.XMLUtils;
 
 /**
  * Created by Вячеслав Молоков on 29.04.2017.

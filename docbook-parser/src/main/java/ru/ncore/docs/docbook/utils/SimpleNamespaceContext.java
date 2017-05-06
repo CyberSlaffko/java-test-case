@@ -1,9 +1,9 @@
-package ru.ncore.docs.docbook.parser;
+package ru.ncore.docs.docbook.utils;
 
+import javax.xml.namespace.NamespaceContext;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.xml.namespace.NamespaceContext;
 
 public class SimpleNamespaceContext implements NamespaceContext {
 
