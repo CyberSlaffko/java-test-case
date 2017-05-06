@@ -1,6 +1,5 @@
 package ru.ncore.docs.docbook.parser;
 
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
@@ -16,13 +15,18 @@ public class ChapterParser extends ChapterParserStrategy  {
     }
 
     @Override
-    protected List<Chapter> getDataList(Document document) {
+    protected List<ChapterContent> getDataList(Document document) {
         return document.getChaptersList();
     }
 
     @Override
     protected String xpath() {
         return "/d:book/d:chapter";
+    }
+
+    @Override
+    protected ChapterContent.Type getType() {
+        return ChapterContent.Type.CHAPTER;
     }
 
     @Override

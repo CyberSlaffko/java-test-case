@@ -7,11 +7,45 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by Вячеслав Молоков on 29.04.2017.
+ * Содержимое документа (кроме
+ *
  */
 public class ChapterContent {
+    /**
+     * Типы содержимого документа
+     */
     public enum Type {
-        SECTION, PARA, ITEMLIST, ITEMLIST_ITEM, ORDEREDLIST, ORDEREDLIST_ITEM, PHRASE, TEXT, TABLE, PROGRAMLISTING, XREF
+        ANNOTATION, CHAPTER, APPENDIX,
+        /**
+         * Раздел внутри Аннотации, Главы или Приложения
+         */
+        SECTION,
+
+        /**
+         * Параграф
+         */
+        PARA,
+
+        // Списки
+        ITEMLIST, // Ненумерованный список
+        ITEMLIST_ITEM, // Элемент ненумерованного списка
+        ORDEREDLIST, // Нумерованный список
+        ORDEREDLIST_ITEM, // Элемент нумерованного списка
+
+
+        PHRASE, // Фраза (обычно не разрываемая на несколько строк)
+        TEXT, // Текст в абзаце или ячееке таблицы
+        XREF, // Ссылка на другой
+
+        // Таблица
+        TABLE, // Таблица
+
+
+        PROGRAMLISTING,
+
+        FIGURE,
+
+        TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL
     }
 
     public enum ChapterType {
@@ -23,7 +57,6 @@ public class ChapterContent {
     private String title;
     private int level;
     private Type type;
-
     private ChapterType chapterType;
     private List<ChapterContent> contentList = new ArrayList<>();
 

@@ -18,7 +18,7 @@ public class XRefParser extends IContentParser {
         Attr attr = ((DeferredElementNSImpl) xmlDocument).getAttributeNode("linkend");
         if (null != attr) {
             String xrefLink = attr.getValue();
-            para.setTitle(MD5Utils.HexMD5ForString(xrefLink));
+            para.setBookmarkId(MD5Utils.HexMD5ForString(xrefLink));
             return para;
         }
 

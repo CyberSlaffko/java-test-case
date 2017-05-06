@@ -35,18 +35,10 @@ public class ContentParserFactory {
                 return new XRefParser();
             case "table":
                 return new TableParser();
+            case "figure":
+                return new FigureParser();
             case "programlisting":
-                return new IContentParser() {
-                    @Override
-                    ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
-                        ChapterContent para = new ChapterContent();
-                        para.setType(ChapterContent.Type.PROGRAMLISTING);
-                        para.setLevel(currentLevel);
-                        para.setChapterType(chapterType);
-                        para.setTitle(XMLUtils.getNodeValueNoTrim(xmlDocument, "./text()"));
-                        return para;
-                    }
-                };
+                return new ProgramListingParser();
             case "para":
                 return new ParaParser();
             case "variablelist":
@@ -66,6 +58,18 @@ public class ContentParserFactory {
                 System.out.printf("[W001] Unknown tag: %s\n", contentNode.getNodeName());
                 return null;
             }
+        }
+    }
+
+    private static class ProgramListingParser extends IContentParser {
+        @Override
+        ChapterContent parse(int currentLevel, ChapterContent.ChapterType chapterType) {
+            ChapterContent para = new ChapterContent();
+            para.setType(ChapterContent.Type.PROGRAMLISTING);
+            para.setLevel(currentLevel);
+            para.setChapterType(chapterType);
+            para.setTitle(XMLUtils.getNodeValueNoTrim(xmlDocument, "./text()"));
+            return para;
         }
     }
 

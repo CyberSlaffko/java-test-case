@@ -1,8 +1,9 @@
-package ru.ncore.docs.templates.pmi;
+package ru.ncore.docs.templates.pmi.renderers;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
+import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.OutputStream;
 
@@ -11,7 +12,7 @@ import java.io.OutputStream;
  */
 public class ListingRenderer extends IContentRenderer {
     @Override
-    void render(OutputStream wordDocumentData) {
+    public void render(OutputStream wordDocumentData) {
         JtwigTemplate innerTemplate = JtwigTemplate.classpathTemplate("/templates/document/listing.twig");
         JtwigModel innerModel = JtwigModel.newModel();
         innerModel.with("uuid", contentData.getUuid());

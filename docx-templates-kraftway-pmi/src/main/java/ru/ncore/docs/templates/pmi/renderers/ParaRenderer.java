@@ -1,12 +1,16 @@
-package ru.ncore.docs.templates.pmi;
+package ru.ncore.docs.templates.pmi.renderers;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.templates.pmi.ContentRendererFactory;
+import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Objects;
+
+import static ru.ncore.docs.docbook.document.ChapterContent.Type.XREF;
 
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
@@ -17,7 +21,7 @@ public class ParaRenderer extends IContentRenderer {
     @Override
     public void render(OutputStream wordDocumentData) {
         OutputStream innerData = new ByteArrayOutputStream(1024);
-        boolean rendered = innerParaRender(innerData, contentData.getTitle(), contentData.getUuid(), templateFor(contentData));
+        boolean rendered = innerParaRender(innerData, contentData, templateFor(contentData));
 
         for(ChapterContent innerContent : contentData.getContentList()) {
             if (innerContent.isList() || innerContent.isTable()) {
@@ -31,7 +35,7 @@ public class ParaRenderer extends IContentRenderer {
                 }
             }
             else {
-                rendered = innerParaRender(innerData, innerContent.getTitle(), innerContent.getUuid(), templateFor(innerContent)) || rendered;
+                rendered = innerParaRender(innerData, innerContent, templateFor(innerContent)) || rendered;
             }
         }
 
@@ -55,7 +59,7 @@ public class ParaRenderer extends IContentRenderer {
             case TEXT:
                 return "templates/document/para_r.twig";
             case XREF:
-                if (document.getLinkType(type.getTitle()) == ChapterContent.Type.SECTION) {
+                if (document.getLinkType(type.getBookmarkId()) == ChapterContent.Type.SECTION) {
                     return "templates/document/ref.twig";
                 } else {
                     return "templates/document/ref_obj.twig";
@@ -66,7 +70,29 @@ public class ParaRenderer extends IContentRenderer {
         return null;
     }
 
-    private boolean innerParaRender(OutputStream innerData, String text, String uuid, String tmpl) {
+    private boolean innerParaRender(OutputStream innerData, ChapterContent content, String tmpl) {
+        String text = content.getTitle();
+
+        if (XREF == content.getType()) {
+            ChapterContent.Type linkType = document.getLinkType(content.getBookmarkId());
+            if (linkType != null) {
+                switch (linkType) {
+                    case SECTION:
+                        text = "п. ";
+                        break;
+                    case TABLE:
+                        text = "табл. ";
+                        break;
+                    case FIGURE:
+                        text = "рис. ";
+                        break;
+                    default:
+                        text = " ";
+                        break;
+                }
+            }
+        }
+
         if (null == text || text.isEmpty()) {
             return false;
         }
@@ -75,7 +101,7 @@ public class ParaRenderer extends IContentRenderer {
         JtwigModel innerModel = JtwigModel.newModel();
 
         innerModel.with("para", text);
-        innerModel.with("uuid", uuid);
+        innerModel.with("uuid", content.getBookmarkId());
 
         innerTemplate.render(innerModel, innerData);
         return true;

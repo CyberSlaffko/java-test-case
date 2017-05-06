@@ -2,6 +2,7 @@ package ru.ncore.docs.templates.pmi;
 
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.templates.pmi.renderers.*;
 
 
 /**
@@ -19,6 +20,8 @@ public class ContentRendererFactory {
                 return (new SectionRenderer()).setContent(contentData).setDocument(document);
             case TABLE:
                 return (new TableRenderer()).setContent(contentData).setDocument(document);
+            case FIGURE:
+                return (new FigureRenderer()).setContent(contentData).setDocument(document);
             case PROGRAMLISTING:
                 return (new ListingRenderer()).setContent(contentData).setDocument(document);
             default:

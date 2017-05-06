@@ -5,7 +5,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.Document;
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
@@ -28,19 +27,20 @@ public abstract class ChapterParserStrategy {
         this.document = document;
         NodeList nodes = XMLUtils.getNodes(xmlDocument, xpath());
 
-        List<Chapter> chaptersList = getDataList(document);
+        List<ChapterContent> chaptersList = getDataList(document);
 
         for(int i = 0; i < nodes.getLength(); i++) {
             chaptersList.add(parseChapter(nodes.item(i)));
         }
     }
 
-    protected abstract List<Chapter> getDataList(Document document);
+    protected abstract List<ChapterContent> getDataList(Document document);
 
     protected abstract String xpath();
 
-    private Chapter parseChapter(Node chapterNode) {
-        Chapter chapter = new Chapter();
+    private ChapterContent parseChapter(Node chapterNode) {
+        ChapterContent chapter = new ChapterContent();
+        chapter.setLevel(1);
 
         List<ChapterContent> contentList = chapter.getContentList();
         int nextLevel = chapter.getLevel() + 1;
@@ -49,7 +49,7 @@ public abstract class ChapterParserStrategy {
         if (null != attr) {
             String xrefLink = MD5Utils.HexMD5ForString(attr.getValue());
             chapter.setBookmarkId(xrefLink);
-            document.addLink(xrefLink, SECTION);
+            document.addLink(xrefLink, getType());
         }
 
         NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
@@ -68,6 +68,8 @@ public abstract class ChapterParserStrategy {
         }
         return chapter;
     }
+
+    protected abstract ChapterContent.Type getType();
 
     protected abstract ChapterContent.ChapterType getChapterType();
 }

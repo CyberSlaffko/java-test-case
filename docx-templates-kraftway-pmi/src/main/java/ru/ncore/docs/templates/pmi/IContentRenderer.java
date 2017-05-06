@@ -12,9 +12,9 @@ public abstract class IContentRenderer {
     protected ChapterContent contentData;
     protected Document document;
 
-    abstract void render(OutputStream wordDocumentData);
+    public abstract void render(OutputStream wordDocumentData);
 
-    IContentRenderer setContent(ChapterContent contentData) {
+    public IContentRenderer setContent(ChapterContent contentData) {
         this.contentData = contentData;
         return this;
     }

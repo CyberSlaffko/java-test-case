@@ -3,7 +3,6 @@ package ru.ncore.docs.docbook.parser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class AnnotationParser {
             return;
         }
 
-        Chapter annotation = parseChapter(nodes.item(ANNOTATION_INDEX));
+        ChapterContent annotation = parseChapter(nodes.item(ANNOTATION_INDEX));
         if (null == annotation.getTitle() || annotation.getTitle().isEmpty()) {
             annotation.setTitle(ANNOTATION_TITLE);
         }
@@ -39,9 +38,9 @@ public class AnnotationParser {
         document.setAnnotaion(annotation);
     }
 
-    private Chapter parseChapter(Node chapterNode) {
+    private ChapterContent parseChapter(Node chapterNode) {
         NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
-        Chapter chapter = new Chapter();
+        ChapterContent chapter = new ChapterContent();
 
         List<ChapterContent> contentList = chapter.getContentList();
         int nextLevel = chapter.getLevel() + 1;

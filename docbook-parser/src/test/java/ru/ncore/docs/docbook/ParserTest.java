@@ -1,7 +1,6 @@
 package ru.ncore.docs.docbook;
 
 import org.junit.jupiter.api.Test;
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
 import ru.ncore.docs.docbook.parser.MD5Utils;
@@ -36,7 +35,7 @@ class ParserTest {
         DocumentInfo info = parseResult.getInfo();
         checkDocumentInfo(info);
 
-        Chapter annotationChapter = parseResult.getAnnotaion();
+        ChapterContent annotationChapter = parseResult.getAnnotaion();
         assertNotNull(annotationChapter);
 
         assertAll(
@@ -49,12 +48,12 @@ class ParserTest {
                 () -> assertEquals("http://bd-test.it.mvd.ru/", annotationChapter.getContentList().get(0).getContentList().get(0).getTitle())
         );
 
-        List<Chapter> chaptersList = parseResult.getChaptersList();
+        List<ChapterContent> chaptersList = parseResult.getChaptersList();
         assertAll(
                 () -> assertEquals(1, chaptersList.size())
         );
 
-        Chapter chapter = chaptersList.get(0);
+        ChapterContent chapter = chaptersList.get(0);
         assertAll(
                 () -> assertEquals("Название главы 1", chapter.getTitle()),
                 () -> assertEquals(MD5Utils.HexMD5ForString("test2"), chapter.getBookmarkId())
@@ -91,12 +90,12 @@ class ParserTest {
         DocumentInfo info = parseResult.getInfo();
         checkDocumentInfo(info);
 
-        List<Chapter> chaptersList = parseResult.getChaptersList();
+        List<ChapterContent> chaptersList = parseResult.getChaptersList();
         assertAll(
                 () -> assertEquals(1, chaptersList.size())
         );
 
-        Chapter chapter = chaptersList.get(0);
+        ChapterContent chapter = chaptersList.get(0);
         assertAll(
                 () -> assertEquals("Название главы 1", chapter.getTitle())
         );

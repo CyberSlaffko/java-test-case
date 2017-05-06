@@ -3,7 +3,6 @@ package ru.ncore.docs.templates.pmi;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import ru.ncore.docs.docbook.Document;
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.io.*;
@@ -25,11 +24,11 @@ public class DocxMaker {
         renderAnnotation(document, wordDocumentData);
         renderToc(wordDocumentData);
 
-        for (Chapter chapter : document.getChaptersList()) {
+        for (ChapterContent chapter : document.getChaptersList()) {
             renderChapter(document, wordDocumentData, chapter, "templates/document/chapter_title.twig");
         }
 
-        for (Chapter chapter : document.getAppendiciesList()) {
+        for (ChapterContent chapter : document.getAppendiciesList()) {
             renderChapter(document, wordDocumentData, chapter, "templates/document/appendix_title.twig");
         }
 
@@ -51,7 +50,7 @@ public class DocxMaker {
     }
 
     private void renderAnnotation(Document document, OutputStream wordDocumentData) {
-        Chapter annotation = document.getAnnotaion();
+        ChapterContent annotation = document.getAnnotaion();
         if (null == annotation) {
             return;
         }
@@ -59,7 +58,7 @@ public class DocxMaker {
         renderChapter(document, wordDocumentData, annotation, "templates/document/annotation_title.twig");
     }
 
-    private void renderChapter(Document document, OutputStream wordDocumentData, Chapter chapter, String templatePath) {
+    private void renderChapter(Document document, OutputStream wordDocumentData, ChapterContent chapter, String templatePath) {
         JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 

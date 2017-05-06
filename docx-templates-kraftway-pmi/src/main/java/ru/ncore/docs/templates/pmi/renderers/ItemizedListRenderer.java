@@ -1,6 +1,7 @@
-package ru.ncore.docs.templates.pmi;
+package ru.ncore.docs.templates.pmi.renderers;
 
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.OutputStream;
 
@@ -9,7 +10,7 @@ import java.io.OutputStream;
  */
 public class ItemizedListRenderer extends IContentRenderer {
     @Override
-    void render(OutputStream wordDocumentData) {
+    public void render(OutputStream wordDocumentData) {
         String itemizedTemplatePath = "templates/document/itemizedlist_1.twig";
         String orderedTemplatePath = "templates/document/orderedlist_1.twig";
 

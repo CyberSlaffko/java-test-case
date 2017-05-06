@@ -1,8 +1,6 @@
 package ru.ncore.docs.docbook.parser;
 
-import org.w3c.dom.*;
 import org.w3c.dom.Document;
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 
 import java.util.List;
@@ -17,13 +15,18 @@ public class AppendixParser extends ChapterParserStrategy {
     }
 
     @Override
-    protected List<Chapter> getDataList(ru.ncore.docs.docbook.Document document) {
+    protected List<ChapterContent> getDataList(ru.ncore.docs.docbook.Document document) {
         return document.getAppendiciesList();
     }
 
     @Override
     protected String xpath() {
         return "/d:book/d:appendix";
+    }
+
+    @Override
+    protected ChapterContent.Type getType() {
+        return ChapterContent.Type.APPENDIX;
     }
 
     @Override

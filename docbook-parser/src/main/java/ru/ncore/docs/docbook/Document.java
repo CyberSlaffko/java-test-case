@@ -1,6 +1,5 @@
 package ru.ncore.docs.docbook;
 
-import ru.ncore.docs.docbook.document.Chapter;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
 
@@ -15,13 +14,13 @@ import java.util.Map;
 public class Document {
 
     DocumentInfo documentInfo = new DocumentInfo();
-    List<Chapter> chaptersList = new ArrayList<>();
+    List<ChapterContent> chaptersList = new ArrayList<>();
 
-    List<Chapter> appendiciesList = new ArrayList<>();
+    List<ChapterContent> appendiciesList = new ArrayList<>();
 
     Map<String, ChapterContent.Type> links = new HashMap<>();
 
-    Chapter annotaion;
+    ChapterContent annotaion;
 
     public enum Type {
         BOOK, ERROR
@@ -48,23 +47,23 @@ public class Document {
         documentInfo = info;
     }
 
-    public List<Chapter> getChaptersList() {
+    public List<ChapterContent> getChaptersList() {
         return chaptersList;
     }
 
-    public Chapter getAnnotaion() {
+    public ChapterContent getAnnotaion() {
         return annotaion;
     }
 
-    public void setAnnotaion(Chapter annotaion) {
+    public void setAnnotaion(ChapterContent annotaion) {
         this.annotaion = annotaion;
     }
 
-    public List<Chapter> getAppendiciesList() {
+    public List<ChapterContent> getAppendiciesList() {
         return appendiciesList;
     }
 
-    public void setAppendiciesList(List<Chapter> appendiciesList) {
+    public void setAppendiciesList(List<ChapterContent> appendiciesList) {
         this.appendiciesList = appendiciesList;
     }
 

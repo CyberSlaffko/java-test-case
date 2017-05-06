@@ -1,8 +1,10 @@
-package ru.ncore.docs.templates.pmi;
+package ru.ncore.docs.templates.pmi.renderers;
 
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.templates.pmi.ContentRendererFactory;
+import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.OutputStream;
 
