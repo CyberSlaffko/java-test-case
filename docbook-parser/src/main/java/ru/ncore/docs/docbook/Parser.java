@@ -62,5 +62,4 @@ public class Parser {
         new ChapterParser(xmlDocument).parse(document);
         new AppendixParser(xmlDocument).parse(document);
     }
-
 }

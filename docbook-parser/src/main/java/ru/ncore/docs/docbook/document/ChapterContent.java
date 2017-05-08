@@ -19,6 +19,10 @@ public class ChapterContent {
         uuid = UUID.randomUUID().toString();
     }
 
+    /**
+     * Если getType == IMAGEDATA, то в это путь до картинки в Docbook
+     * @return
+     */
     public String getTitle() {
         return title;
     }

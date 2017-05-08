@@ -31,7 +31,7 @@ public class ParaRenderer extends IContentRenderer {
                 innerData = new ByteArrayOutputStream(1024);
                 rendered = false;
 
-                IContentRenderer renderer = ContentRendererFactory.getRenderer(innerContent, document);
+                IContentRenderer renderer = ContentRendererFactory.getRenderer(innerContent, document, relationManager);
                 if (null != renderer) {
                     renderer.render(wordDocumentData);
                 }

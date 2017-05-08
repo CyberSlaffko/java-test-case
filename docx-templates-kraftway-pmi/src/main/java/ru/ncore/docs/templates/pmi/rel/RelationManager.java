@@ -6,14 +6,13 @@ import ru.ncore.rel.schema.ObjectFactory;
 import ru.ncore.rel.schema.RelationshipType;
 import ru.ncore.rel.schema.RelationshipsType;
 
-import javax.imageio.ImageIO;
 import javax.xml.bind.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by Вячеслав Молоков on 08.05.2017.
@@ -24,6 +23,7 @@ public class RelationManager {
     JAXBElement<RelationshipsType> relationships;
     ObjectFactory objectFactory;
     int maxRId = 0;
+    private List<Media> mediaList = new ArrayList<>();
 
     public RelationManager() {
         objectFactory = new ObjectFactory();
@@ -77,13 +77,15 @@ public class RelationManager {
     public Media addRelation(String imgPath) {
         List<RelationshipType> relationshipList = relationships.getValue().getRelationship();
 
-        Media media = new Media(imgPath);
+        Media media = new Media(imgPath, mediaList.size() + 1);
 
         RelationshipType relationshipType = objectFactory.createRelationshipType();
         relationshipType.setId(nextRId());
         relationshipType.setType(media.getType());
         relationshipType.setTarget(media.getPath());
         relationshipList.add(relationshipType);
+
+        mediaList.add(media);
 
         return media;
     }
@@ -93,35 +95,22 @@ public class RelationManager {
         return String.format("rId%d", maxRId);
     }
 
-    public static class Media {
-        final static private Logger logger = LoggerFactory.getLogger(Media.class);
-        private final String mediaPath;
-        private String imgPath;
+    public String getRIdForImage(String title) {
+        Optional<Media> firstMedia = mediaList.stream().
+                filter(rl -> Objects.equals(rl.getImagePath(), title)).findFirst();
+        if(!firstMedia.isPresent()) {
+            logger.warn(String.format("Requested unknown media: %s", title));
+            return "";
+        }
+        String path = firstMedia.get().getPath();
 
-        public Media(String imgPath) {
-            this.imgPath = imgPath;
-            mediaPath = String.format("/word/media/image_%d.png", imgPath.hashCode());
+        Optional<RelationshipType> firstRelation = relationships.getValue().getRelationship().stream().
+                filter(rl -> Objects.equals(rl.getTarget(), path)).findFirst();
+        if(!firstRelation.isPresent()) {
+            logger.warn(String.format("Relation for media %s not found", path));
+            return "";
         }
 
-        public String getType() {
-            return "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
-        }
-
-        public ByteArrayOutputStream toPNG() {
-            logger.debug(String.format("Processing image %s", imgPath));
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(10240);;
-            try {
-                BufferedImage bufferedImage = ImageIO.read(new File(imgPath));
-                ImageIO.write(bufferedImage, "png", outputStream);
-            } catch (IOException e) {
-                logger.error(String.format("Cannot read image file %s", imgPath), e);
-            }
-
-            return outputStream;
-        }
-
-        public String getPath() {
-            return mediaPath;
-        }
+        return firstRelation.get().getId();
     }
 }

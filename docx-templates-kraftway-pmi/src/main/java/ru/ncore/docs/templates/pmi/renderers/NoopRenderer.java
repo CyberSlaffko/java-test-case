@@ -7,13 +7,13 @@ import ru.ncore.docs.templates.pmi.IContentRenderer;
 import java.io.OutputStream;
 
 /**
- * Created by Вячеслав Молоков on 06.05.2017.
+ * Специальный рендерер, который игнорирует текущий уровень и начинает рендерить своих наследников
  */
 public class NoopRenderer extends IContentRenderer {
     @Override
     public void render(OutputStream wordDocumentData) {
         for(ChapterContent subContent : contentData.getContentList()) {
-            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document);
+            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document, relationManager);
             if (null != renderer) {
                 renderer.render(wordDocumentData);
             }

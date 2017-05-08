@@ -74,5 +74,9 @@
             <id>jcenter</id>
             <url>https://jcenter.bintray.com/</url>
         </repository>
+        <repository>
+            <id>Central</id>
+            <url>http://central.maven.org/maven2/</url>
+        </repository>
     </repositories>
 </project>

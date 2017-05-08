@@ -2,6 +2,7 @@ package ru.ncore.docs.templates.pmi;
 
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.templates.pmi.rel.RelationManager;
 
 import java.io.OutputStream;
 
@@ -11,6 +12,7 @@ import java.io.OutputStream;
 public abstract class IContentRenderer {
     protected ChapterContent contentData;
     protected Document document;
+    protected RelationManager relationManager;
 
     public abstract void render(OutputStream wordDocumentData);
 
@@ -19,8 +21,9 @@ public abstract class IContentRenderer {
         return this;
     }
 
-    public IContentRenderer setDocument(Document document) {
+    public IContentRenderer setDocument(Document document, RelationManager relationManager) {
         this.document = document;
+        this.relationManager = relationManager;
         return this;
     }
 }

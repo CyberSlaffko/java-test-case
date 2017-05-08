@@ -25,7 +25,7 @@ public class ItemizedListRenderer extends IContentRenderer {
                     paraRenderer.setTemplatePath(orderedTemplatePath);
                 }
                 paraRenderer.setContent(content);
-                paraRenderer.setDocument(document);
+                paraRenderer.setDocument(document, relationManager);
                 paraRenderer.render(wordDocumentData);
             }
         }

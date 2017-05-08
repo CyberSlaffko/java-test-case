@@ -7,4 +7,8 @@ public abstract class SizeUtils {
     public static long cmToWordPoints(double cm) {
         return Math.round(cm * 72 * 20 / 2.54f);
     }
+
+    public static long cmToWordImagePoints(double cm) {
+        return Math.round(cm * 360000);
+    }
 }

@@ -1,23 +1,20 @@
 package ru.ncore.docs.templates.pmi.renderers;
 
-import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.ContentRendererFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created by Вячеслав Молоков on 03.05.2017.
+ * Рендерер для картинки с заголовоком
  */
 public class FigureRenderer extends IContentRenderer {
     @Override
     public void render(OutputStream wordDocumentData) {
         for(ChapterContent subContent : contentData.getContentList()) {
-            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document);
+            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document, relationManager);
             if (null != renderer) {
                 renderer.render(wordDocumentData);
             }
