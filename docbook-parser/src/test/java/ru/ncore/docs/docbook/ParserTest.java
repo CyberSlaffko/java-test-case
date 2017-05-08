@@ -1,6 +1,7 @@
 package ru.ncore.docs.docbook;
 
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.annotation.Testable;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
 import ru.ncore.docs.docbook.utils.MD5Utils;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Testable
 class ParserTest {
     @Test
     void testShouldHandleIncorrectFileNames() {

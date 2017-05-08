@@ -13,6 +13,7 @@
         <module>docbook-parser</module>
         <module>docx-writer</module>
         <module>docx-templates-kraftway-pmi</module>
+        <module>app</module>
     </modules>
 
     <dependencies>
@@ -20,6 +21,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>RELEASE</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jtwig</groupId>
@@ -38,6 +40,12 @@
             <scope>test</scope>
         </dependency>
         <!--<dependency>-->
+            <!--<groupId>org.jetbrains.spek</groupId>-->
+            <!--<artifactId>spek-junit-platform-engine</artifactId>-->
+            <!--<version>1.0.89</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
         <!--<groupId>com.google.guava</groupId>-->
         <!--<artifactId>guava</artifactId>-->
         <!--<version>21.0</version>-->
@@ -54,6 +62,11 @@
                         <groupId>org.junit.platform</groupId>
                         <artifactId>junit-platform-surefire-provider</artifactId>
                         <version>1.0.0-M4</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.0.0-M4</version>
                     </dependency>
                 </dependencies>
             </plugin>

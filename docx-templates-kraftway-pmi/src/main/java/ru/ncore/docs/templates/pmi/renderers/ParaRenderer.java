@@ -62,7 +62,13 @@ public class ParaRenderer extends IContentRenderer {
             case TEXT:
                 return "templates/document/para_r.twig";
             case XREF:
-                switch (document.getLinkType(type.getBookmarkId())) {
+                ChapterContent.Type linkType = document.getLinkType(type.getBookmarkId());
+                if (linkType == null) {
+                    logger.warn(String.format("Link to nowhere"));
+                    logger.debug(String.format("XRef linkend=%s, hash=%s", type.getTitle(), type.getBookmarkId()));
+                    return "templates/document/ref_obj.twig";
+                }
+                switch (linkType) {
                     case SECTION:
                     case CHAPTER:
                     case APPENDIX:
