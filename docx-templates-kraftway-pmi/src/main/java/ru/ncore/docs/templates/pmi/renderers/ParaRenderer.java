@@ -1,5 +1,6 @@
 package ru.ncore.docs.templates.pmi.renderers;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.slf4j.Logger;
@@ -61,10 +62,13 @@ public class ParaRenderer extends IContentRenderer {
             case TEXT:
                 return "templates/document/para_r.twig";
             case XREF:
-                if (document.getLinkType(type.getBookmarkId()) == ChapterContent.Type.SECTION) {
-                    return "templates/document/ref.twig";
-                } else {
-                    return "templates/document/ref_obj.twig";
+                switch (document.getLinkType(type.getBookmarkId())) {
+                    case SECTION:
+                    case CHAPTER:
+                    case APPENDIX:
+                        return "templates/document/ref.twig";
+                    default:
+                        return "templates/document/ref_obj.twig";
                 }
             default:
                 logger.warn(String.format("Unknown inline element %s", type.getType()));
@@ -79,6 +83,12 @@ public class ParaRenderer extends IContentRenderer {
             ChapterContent.Type linkType = document.getLinkType(content.getBookmarkId());
             if (linkType != null) {
                 switch (linkType) {
+                    case CHAPTER:
+                        text = "гл. ";
+                        break;
+                    case APPENDIX:
+                        text = "прил. ";
+                        break;
                     case SECTION:
                         text = "п. ";
                         break;
@@ -89,7 +99,8 @@ public class ParaRenderer extends IContentRenderer {
                         text = "рис. ";
                         break;
                     default:
-                        logger.warn(String.format("Unknown XRef type %s", content.getType()));
+                        logger.warn(String.format("Unknown XRef type %s", linkType));
+                        logger.debug(String.format("XRef linkend=%s, hash=%s", content.getTitle(), content.getBookmarkId()));
                         text = " ";
                         break;
                 }
@@ -103,7 +114,7 @@ public class ParaRenderer extends IContentRenderer {
         JtwigTemplate innerTemplate = JtwigTemplate.classpathTemplate(tmpl);
         JtwigModel innerModel = JtwigModel.newModel();
 
-        innerModel.with("para", text);
+        innerModel.with("para", StringEscapeUtils.escapeXml(text));
         innerModel.with("uuid", content.getBookmarkId());
 
         innerTemplate.render(innerModel, innerData);

@@ -1,5 +1,6 @@
 package ru.ncore.docs.templates.pmi.renderers;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import ru.ncore.docs.docbook.document.ChapterContent;
@@ -19,7 +20,7 @@ public class TableRenderer extends IContentRenderer {
         JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 
-        model.with("title", contentData.getTitle());
+        model.with("title", StringEscapeUtils.escapeXml(contentData.getTitle()));
         model.with("uuid", contentData.getBookmarkId());
 
         template.render(model, wordDocumentData);

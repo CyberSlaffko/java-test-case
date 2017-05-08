@@ -30,4 +30,54 @@ public class DocxMakerTest {
         DocxMaker maker = new DocxMaker();
         maker.makeDocument(parseResult, java.nio.file.Paths.get("D:\\Projects\\docs\\out\\ПЗ - Общие требования.docx"));
     }
+
+    @Test
+    public void renderOz() throws URISyntaxException, IOException {
+        java.net.URL url = this.getClass().getResource("/TP_2017/OZ/index.xml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+        Parser parser = new Parser();
+        final Document parseResult = parser.parse(resPath.toString());
+        DocxMaker maker = new DocxMaker();
+        maker.makeDocument(parseResult, java.nio.file.Paths.get("D:\\Projects\\docs\\out\\ПЗ - Обработчик запросов.docx"));
+    }
+
+    @Test
+    public void renderEzh() throws URISyntaxException, IOException {
+        java.net.URL url = this.getClass().getResource("/TP_2017/Ezh/index.xml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+        Parser parser = new Parser();
+        final Document parseResult = parser.parse(resPath.toString());
+        DocxMaker maker = new DocxMaker();
+        maker.makeDocument(parseResult, java.nio.file.Paths.get("D:\\Projects\\docs\\out\\ПЗ - Электронный журнал.docx"));
+    }
+
+    @Test
+    public void renderAp() throws URISyntaxException, IOException {
+        java.net.URL url = this.getClass().getResource("/TP_2017/AP/index.xml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+        Parser parser = new Parser();
+        final Document parseResult = parser.parse(resPath.toString());
+        DocxMaker maker = new DocxMaker();
+        maker.makeDocument(parseResult, java.nio.file.Paths.get("D:\\Projects\\docs\\out\\ПЗ - Адм практика.docx"));
+    }
+
+    @Test
+    public void renderAu() throws URISyntaxException, IOException {
+        java.net.URL url = this.getClass().getResource("/TP_2017/AU/index.xml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+        Parser parser = new Parser();
+        final Document parseResult = parser.parse(resPath.toString());
+        DocxMaker maker = new DocxMaker();
+        maker.makeDocument(parseResult, java.nio.file.Paths.get("D:\\Projects\\docs\\out\\ПЗ - Аудит.docx"));
+    }
+
+    @Test
+    public void renderAd() throws URISyntaxException, IOException {
+        java.net.URL url = this.getClass().getResource("/TP_2017/AD/index.xml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(url.toURI());
+        Parser parser = new Parser();
+        final Document parseResult = parser.parse(resPath.toString());
+        DocxMaker maker = new DocxMaker();
+        maker.makeDocument(parseResult, java.nio.file.Paths.get("D:\\Projects\\docs\\out\\ПЗ - Админка.docx"));
+    }
 }

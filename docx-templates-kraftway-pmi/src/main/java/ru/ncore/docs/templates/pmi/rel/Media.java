@@ -15,12 +15,12 @@ import java.io.IOException;
 public class Media {
     final static private Logger logger = LoggerFactory.getLogger(Media.class);
     private final String mediaPath;
-    private int mediaIndex;
     private String imgPath;
+    private int width;
+    private int height;
 
     public Media(String imgPath, int mediaIndex) {
         this.imgPath = imgPath;
-        this.mediaIndex = mediaIndex;
         mediaPath = String.format("media/image%d.png", mediaIndex);
     }
 
@@ -31,9 +31,10 @@ public class Media {
     public ByteArrayOutputStream toPNG() {
         logger.debug(String.format("Processing image %s", imgPath));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(10240);
-        ;
         try {
             BufferedImage bufferedImage = ImageIO.read(new File(imgPath));
+            height = bufferedImage.getHeight();
+            width = bufferedImage.getWidth();
             ImageIO.write(bufferedImage, "png", outputStream);
         } catch (IOException e) {
             logger.error(String.format("Cannot read image file %s", imgPath), e);
@@ -48,5 +49,13 @@ public class Media {
 
     public String getImagePath() {
         return imgPath;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

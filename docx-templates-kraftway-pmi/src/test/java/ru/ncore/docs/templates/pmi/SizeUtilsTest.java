@@ -14,4 +14,14 @@ public class SizeUtilsTest {
         assertEquals(11906, SizeUtils.cmToWordPoints(21));
         assertEquals(16838, SizeUtils.cmToWordPoints(29.7));
     }
+
+    @Test
+    public void textToCmTest() {
+        assertEquals(11.1f, SizeUtils.textToCm("111"), 0.001f);
+        assertEquals(11.11f, SizeUtils.textToCm("111.1"), 0.001f);
+        assertEquals(11.1f, SizeUtils.textToCm("111mm"), 0.001f);
+        assertEquals(11.12f, SizeUtils.textToCm("111.2mm"), 0.001f);
+        assertEquals(11.1f, SizeUtils.textToCm("11.1cm"), 0.001f);
+        assertEquals(1.0f, SizeUtils.textToCm("1cm"), 0.001f);
+    }
 }

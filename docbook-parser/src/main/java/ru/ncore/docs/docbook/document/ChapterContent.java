@@ -83,7 +83,7 @@ public class ChapterContent {
     }
 
     public boolean isImage() {
-        return type == Type.MEDIAOBJECT;
+        return type == Type.MEDIAOBJECT || type == Type.FIGURE;
     }
 
     /**
@@ -123,7 +123,12 @@ public class ChapterContent {
         IMAGEOBJECT,
         IMAGEDATA,
 
-        TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL
+        TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL,
+
+        /**
+         * Вспомогательный элемент. Используется как концевой. Обозначает ширину таблицы, картики и т.п.
+         */
+        WIDTH
     }
 
     public enum ChapterType {

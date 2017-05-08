@@ -96,8 +96,7 @@ public class RelationManager {
     }
 
     public String getRIdForImage(String title) {
-        Optional<Media> firstMedia = mediaList.stream().
-                filter(rl -> Objects.equals(rl.getImagePath(), title)).findFirst();
+        Optional<Media> firstMedia = getMedia(title);
         if(!firstMedia.isPresent()) {
             logger.warn(String.format("Requested unknown media: %s", title));
             return "";
@@ -112,5 +111,30 @@ public class RelationManager {
         }
 
         return firstRelation.get().getId();
+    }
+
+    private Optional<Media> getMedia(String title) {
+        return mediaList.stream().
+                    filter(rl -> Objects.equals(rl.getImagePath(), title)).findFirst();
+    }
+
+    public int getImageWeight(String title) {
+        Optional<Media> firstMedia = getMedia(title);
+        if(!firstMedia.isPresent()) {
+            logger.warn(String.format("Requested unknown media: %s", title));
+            return 0;
+        }
+
+        return firstMedia.get().getWidth();
+    }
+
+    public int getImageHeight(String title) {
+        Optional<Media> firstMedia = getMedia(title);
+        if(!firstMedia.isPresent()) {
+            logger.warn(String.format("Requested unknown media: %s", title));
+            return 0;
+        }
+
+        return firstMedia.get().getHeight();
     }
 }
