@@ -16,6 +16,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
@@ -37,9 +38,10 @@ public class Parser {
             dbf.setXIncludeAware(true);
             dbf.setNamespaceAware(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
-            xmlDocument = db.parse(new File(fileName));
+            File file = new File(fileName);
+            xmlDocument = db.parse(file);
             xmlDocument.getDocumentElement().normalize();
-            document = new Document();
+            document = new Document(Paths.get(file.getAbsolutePath()).getParent().toString());
 
             parseXmlDocument();
 

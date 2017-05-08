@@ -8,6 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
 
     <artifactId>docbook-parser</artifactId>
     <build>
@@ -20,6 +21,28 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>jaxb2-maven-plugin</artifactId>-->
+                <!--<version>2.2</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>xjc</id>-->
+                        <!--<goals>-->
+                            <!--<goal>xjc</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<packageName>ru.ncore.docs.docbook.schema</packageName>-->
+                    <!--<sources>-->
+                        <!--<source>src/main/resources/xsd/docbook.xsd</source>-->
+                    <!--</sources>-->
+                    <!--<xjbSources>-->
+                        <!--<xjbSource>src/main/xjb/binding.xjb</xjbSource>-->
+                    <!--</xjbSources>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 </project>

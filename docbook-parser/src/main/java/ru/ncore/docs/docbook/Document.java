@@ -1,5 +1,7 @@
 package ru.ncore.docs.docbook;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.document.DocumentInfo;
 
@@ -9,17 +11,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Вячеслав Молоков on 29.04.2017.
+ * Класс представляющий книгу в формате Docbook
  */
 public class Document {
+    static final Logger logger = LoggerFactory.getLogger(Document.class);
+    private DocumentInfo documentInfo = new DocumentInfo();
+    private List<ChapterContent> chaptersList = new ArrayList<>();
 
-    DocumentInfo documentInfo = new DocumentInfo();
-    List<ChapterContent> chaptersList = new ArrayList<>();
-
-    List<ChapterContent> appendicesList = new ArrayList<>();
-    List<String> images = new ArrayList<>();
+    private List<ChapterContent> appendicesList = new ArrayList<>();
+    private List<String> images = new ArrayList<>();
     private Map<String, ChapterContent.Type> links = new HashMap<>();
     private ChapterContent annotation;
+    private String absolutePath;
+
+    public Document(String absolutePath) {
+        logger.debug(String.format("Path to file: %s", absolutePath));
+        this.absolutePath = absolutePath;
+    }
 
     public List<String> getImages() {
         return images;
@@ -62,10 +70,6 @@ public class Document {
         return appendicesList;
     }
 
-    public void setAppendicesList(List<ChapterContent> appendicesList) {
-        this.appendicesList = appendicesList;
-    }
-
     public ChapterContent.Type getLinkType(String xref) {
         return links.get(xref);
     }
@@ -76,6 +80,10 @@ public class Document {
 
     public void addImage(String xrefLink) {
         images.add(xrefLink);
+    }
+
+    public String getAbsolutePath() {
+        return absolutePath;
     }
 
     public enum Type {
