@@ -20,13 +20,13 @@ public class TableEntryParser extends ContentParserAlgorithm {
             Node item = attributes.item(attrIndex);
             switch(item.getNodeName()) {
                 case "morerows":
-                    content.addAdditionalAttribute("joinedRowsAmount", item.getNodeValue());
+                    content.addAdditionalAttribute("morerows", item.getNodeValue());
                     break;
                 case "namest":
-                    content.addAdditionalAttribute("joinCellStart", item.getNodeValue());
+                    content.addAdditionalAttribute("namest", item.getNodeValue());
                     break;
                 case "nameend":
-                    content.addAdditionalAttribute("joinCellEnd", item.getNodeValue());
+                    content.addAdditionalAttribute("nameend", item.getNodeValue());
                     break;
                 default:
                     logger.info(String.format("Unknown attribute %s with value %s", item.getNodeName(), item.getNodeValue()));

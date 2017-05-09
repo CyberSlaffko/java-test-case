@@ -15,8 +15,8 @@ public abstract class SizeUtils {
     private static final Logger logger = LoggerFactory.getLogger(Size.class);
 
     private static Pattern SIZE_SIMPLE = Pattern.compile("^(\\d+(\\.\\d+)?)$");
-    private static Pattern SIZE_CM = Pattern.compile("^(\\d+(\\.\\d+)?)cm$");
-    private static Pattern SIZE_MM = Pattern.compile("^(\\d+(\\.\\d+)?)mm$");
+    private static Pattern SIZE_CM = Pattern.compile("^(\\d+(\\.\\d+)?)\\s?cm$");
+    private static Pattern SIZE_MM = Pattern.compile("^(\\d+(\\.\\d+)?)\\s?mm$");
 
     public static long cmToWordPoints(double cm) {
         return Math.round(cm * 72 * 20 / 2.54f);
@@ -27,23 +27,24 @@ public abstract class SizeUtils {
     }
 
     public static double textToCm(String s) {
-        Matcher simpleMatch = SIZE_SIMPLE.matcher(s);
+        String replaced = s.replace(",", ".");
+        Matcher simpleMatch = SIZE_SIMPLE.matcher(replaced);
         DecimalFormat f = new DecimalFormat("#.##");
         if (simpleMatch.find()) {
             return Double.parseDouble(simpleMatch.group(1)) / 10;
         }
 
-        Matcher cmMatch = SIZE_CM.matcher(s);
+        Matcher cmMatch = SIZE_CM.matcher(replaced);
         if (cmMatch.find()) {
             return Double.parseDouble(cmMatch.group(1));
         }
 
-        Matcher mmMatch = SIZE_MM.matcher(s);
+        Matcher mmMatch = SIZE_MM.matcher(replaced);
         if (mmMatch.find()) {
             return Double.parseDouble(mmMatch.group(1)) / 10;
         }
 
-        logger.error(String.format("Unknown size dimensions: %s", s));
+        logger.error(String.format("Unknown size dimensions: %s", replaced));
         return 0.0f;
     }
 }

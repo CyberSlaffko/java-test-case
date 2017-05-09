@@ -22,6 +22,8 @@ public class SizeUtilsTest {
         assertEquals(11.1f, SizeUtils.textToCm("111mm"), 0.001f);
         assertEquals(11.12f, SizeUtils.textToCm("111.2mm"), 0.001f);
         assertEquals(11.1f, SizeUtils.textToCm("11.1cm"), 0.001f);
+        assertEquals(11.1f, SizeUtils.textToCm("11,1cm"), 0.001f);
         assertEquals(1.0f, SizeUtils.textToCm("1cm"), 0.001f);
+        assertEquals(1.0f, SizeUtils.textToCm("1 cm"), 0.001f);
     }
 }

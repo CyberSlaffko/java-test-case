@@ -4,16 +4,16 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.parser.ObjectParser;
 
 /**
- * Парсер заголовка таблицы
+ * Парсер тела таблицы
  */
-public class THeadParser extends ObjectParser {
-    public THeadParser() {
-        super(ChapterContent.Type.TABLE_HEAD);
+public class TBodyParser extends ObjectParser {
+    public TBodyParser() {
+        super(ChapterContent.Type.TABLE_BODY);
     }
 
     @Override
     protected void parseChilds(ChapterContent content) {
-        chapterType = ChapterContent.ChapterType.TABLE_HEAD;
+        chapterType = ChapterContent.ChapterType.TABLE_BODY;
         super.parseChilds(content);
     }
 }

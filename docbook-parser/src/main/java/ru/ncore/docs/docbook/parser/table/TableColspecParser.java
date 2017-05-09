@@ -32,6 +32,9 @@ public class TableColspecParser extends ContentParserAlgorithm {
                     logger.info(String.format("Tag %s - Unknown attribute %s with value %s", xmlDocument.getLocalName(), item.getNodeName(), item.getNodeValue()));
             }
         }
+        if(null == content.getTitle()) {
+            content.setTitle(String.format("autonamedcol%s", content.getUuid()));
+        }
     }
 
     @Override

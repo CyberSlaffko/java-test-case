@@ -44,6 +44,7 @@ public class ContentParserFactory {
                 return new SectionParser();
             case "#text":
                 return new PlainTextParser();
+            case "emphasis":
             case "para":
                 return new ObjectParser(PARA);
             case "xref":
@@ -56,6 +57,8 @@ public class ContentParserFactory {
                 return new TGroupParser();
             case "thead":
                 return new THeadParser();
+            case "tbody":
+                return new TBodyParser();
             case "row":
                 return new ObjectParser(TABLE_ROW);
             case "colspec":
@@ -78,6 +81,8 @@ public class ContentParserFactory {
                 return new ItemizedListParser(Type.ITEMLIST, Type.ITEMLIST_ITEM);
             case "oxy_custom_start":
             case "oxy_custom_end":
+            case "#comment":
+            case "lb":
                 // NOOP
                 return null;
             case "link":

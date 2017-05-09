@@ -18,7 +18,7 @@ import static ru.ncore.docs.docbook.document.ChapterContent.Type.XREF;
  * Created by Вячеслав Молоков on 03.05.2017.
  */
 public class ParaRenderer extends IContentRenderer {
-    final static Logger logger = LoggerFactory.getLogger(ParaRenderer.class);
+    private final static Logger logger = LoggerFactory.getLogger(ParaRenderer.class);
     private String templatePath = "templates/document/para.twig";
 
     @Override

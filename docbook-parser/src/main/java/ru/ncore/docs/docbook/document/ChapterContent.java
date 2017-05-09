@@ -20,7 +20,7 @@ public class ChapterContent {
     private Map<String, String> additionalAttributes = new HashMap<>();
     private List<ChapterContent> contentList = new ArrayList<>();
     public ChapterContent() {
-        uuid = UUID.randomUUID().toString();
+        uuid = String.valueOf(UUID.randomUUID().hashCode());
     }
 
     /**
@@ -142,10 +142,10 @@ public class ChapterContent {
         TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL,
 
         TGROUP,
-        TABLE_COLSPEC
+        TABLE_BODY, TABLE_COLSPEC
     }
 
     public enum ChapterType {
-        ANNOTATION, CHAPTER, APPENDIX, TABLE, TABLE_HEAD
+        ANNOTATION, CHAPTER, APPENDIX, TABLE, TABLE_BODY, TABLE_HEAD
     }
 }
