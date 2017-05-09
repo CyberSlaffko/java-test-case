@@ -15,7 +15,7 @@ import java.io.OutputStream;
 public class TableRenderer extends IContentRenderer {
     @Override
     public void render(OutputStream wordDocumentData) {
-        String templatePath = "templates/document/table_title.twig";
+        String templatePath = "templates/document/table/table_title.twig";
 
         JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();

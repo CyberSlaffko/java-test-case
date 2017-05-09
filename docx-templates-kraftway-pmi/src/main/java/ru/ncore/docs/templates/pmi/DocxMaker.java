@@ -1,5 +1,6 @@
 package ru.ncore.docs.templates.pmi;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -35,11 +36,11 @@ public class DocxMaker {
             renderAndWriteDocument(document, relationManager, zipfs);
         }
 
-        InputStream fs = new FileInputStream(resultPath.toString());
-        XWPFDocument xwpfDocument = new XWPFDocument(OPCPackage.open(fs));
-        xwpfDocument.enforceUpdateFields();
-        xwpfDocument.write(new FileOutputStream(new File(resultPath.toString())));
-        fs.close();
+//        InputStream fs = new FileInputStream(resultPath.toString());
+//        XWPFDocument xwpfDocument = new XWPFDocument(OPCPackage.open(fs));
+//        xwpfDocument.enforceUpdateFields();
+//        xwpfDocument.write(new FileOutputStream(new File(resultPath.toString())));
+//        fs.close();
     }
 
     private void replaceRootFile(FileSystem zipfs) {

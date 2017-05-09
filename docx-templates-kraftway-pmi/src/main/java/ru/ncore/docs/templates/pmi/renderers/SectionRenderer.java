@@ -18,7 +18,7 @@ public class SectionRenderer extends IContentRenderer {
     static final Logger logger = LoggerFactory.getLogger(SectionRenderer.class);
     @Override
     public void render(OutputStream wordDocumentData) {
-        String templatePath = String.format("templates/document/section_%d.twig", (contentData.getLevel() > 6 ? 6 : contentData.getLevel()));
+        String templatePath = String.format("templates/document/sections/section_%d.twig", (contentData.getLevel() > 6 ? 6 : contentData.getLevel()));
         if (contentData.getLevel() > 9) {
             logger.warn(String.format("Too deep section (level %d) -> %s", contentData.getLevel(), contentData.getTitle()));
         }

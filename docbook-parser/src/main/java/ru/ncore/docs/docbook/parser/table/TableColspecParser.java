@@ -26,11 +26,7 @@ public class TableColspecParser extends ContentParserAlgorithm {
                     content.setTitle(item.getNodeValue());
                     break;
                 case "colwidth":
-                    if (item.getNodeValue().endsWith("*")) {
-                        logger.error(String.format("Unsupported colwidth %s. Do not use '*' on width attributes.", item.getNodeValue()));
-                    } else {
-                        content.addAdditionalAttribute("width", item.getNodeValue());
-                    }
+                    content.addAdditionalAttribute("width", item.getNodeValue());
                     break;
                 default:
                     logger.info(String.format("Tag %s - Unknown attribute %s with value %s", xmlDocument.getLocalName(), item.getNodeName(), item.getNodeValue()));
