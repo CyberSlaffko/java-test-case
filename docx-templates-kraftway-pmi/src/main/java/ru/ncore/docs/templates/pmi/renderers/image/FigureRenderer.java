@@ -1,9 +1,10 @@
-package ru.ncore.docs.templates.pmi.renderers;
+package ru.ncore.docs.templates.pmi.renderers.image;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.ContentRendererFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
+import ru.ncore.docs.templates.pmi.renderers.TemplateUtils;
 
 import java.io.OutputStream;
 import java.util.HashMap;

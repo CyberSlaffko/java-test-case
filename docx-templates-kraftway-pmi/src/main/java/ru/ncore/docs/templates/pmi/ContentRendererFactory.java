@@ -6,6 +6,12 @@ import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.rel.RelationManager;
 import ru.ncore.docs.templates.pmi.renderers.*;
+import ru.ncore.docs.templates.pmi.renderers.image.FigureRenderer;
+import ru.ncore.docs.templates.pmi.renderers.image.ImageRenderer;
+import ru.ncore.docs.templates.pmi.renderers.list.ItemizedListRenderer;
+import ru.ncore.docs.templates.pmi.renderers.list.ListingRenderer;
+import ru.ncore.docs.templates.pmi.renderers.table.TGroupRenderer;
+import ru.ncore.docs.templates.pmi.renderers.table.TableRenderer;
 
 
 /**
@@ -26,6 +32,9 @@ public class ContentRendererFactory {
                 break;
             case SECTION:
                 renderer = new SectionRenderer();
+                break;
+            case TGROUP:
+                renderer = new TGroupRenderer();
                 break;
             case TABLE:
                 renderer = new TableRenderer();

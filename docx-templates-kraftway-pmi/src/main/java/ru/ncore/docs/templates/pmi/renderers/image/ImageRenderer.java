@@ -1,15 +1,13 @@
-package ru.ncore.docs.templates.pmi.renderers;
+package ru.ncore.docs.templates.pmi.renderers.image;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
 import ru.ncore.docs.templates.pmi.SizeUtils;
-import ru.ncore.docs.templates.pmi.rel.RelationManager;
+import ru.ncore.docs.templates.pmi.renderers.TemplateUtils;
 
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * Рендерер самой картинки.
@@ -40,12 +38,6 @@ public class ImageRenderer extends IContentRenderer {
     }
 
     public String getWidth() {
-        Optional<ChapterContent> first = contentData.getContentList().stream().filter(cd -> cd.getType().equals(ChapterContent.Type.WIDTH)).findFirst();
-
-        if (!first.isPresent()) {
-            return "18cm";
-        }
-
-        return first.get().getTitle();
+        return contentData.getAdditionalAttributes().getOrDefault("width", "18cm");
     }
 }

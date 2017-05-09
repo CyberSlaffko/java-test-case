@@ -1,4 +1,4 @@
-package ru.ncore.docs.docbook.parser;
+package ru.ncore.docs.docbook.parser.para;
 
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.parser.algorithms.LeafContentParserAlgorithm;

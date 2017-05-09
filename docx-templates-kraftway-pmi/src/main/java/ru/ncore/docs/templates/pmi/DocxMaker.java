@@ -1,5 +1,8 @@
 package ru.ncore.docs.templates.pmi;
 
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.slf4j.Logger;
@@ -18,17 +21,34 @@ public class DocxMaker {
     static final private Logger logger = LoggerFactory.getLogger(DocxMaker.class);
     private static final String WORD_RELS_DOCUMENT_XML_RELS = "/word/_rels/document.xml.rels";
 
-    public void makeDocument(Document document, Path resultPath) throws URISyntaxException, IOException {
+    public void makeDocument(Document document, Path resultPath) throws URISyntaxException, IOException, InvalidFormatException {
         java.net.URL url = this.getClass().getResource("/template.docx");
         Path resPath = Paths.get(url.toURI());
-        Files.copy(resPath.toAbsolutePath(), resultPath, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Files.newInputStream(resPath), resultPath, StandardCopyOption.REPLACE_EXISTING);
 
         try (FileSystem zipfs = FileSystems.newFileSystem(resultPath, null)) {
+            replaceRootFile(zipfs);
             RelationManager relationManager = readRelations(zipfs);
             renderAndWriteRelations(document, relationManager, zipfs);
-            renderAndWriteHeader2(document, relationManager, zipfs);
-            renderAndWriteHader4(document, relationManager, zipfs);
+            renderAndWriteHeader2(document, zipfs);
+            renderAndWriteHader4(document, zipfs);
             renderAndWriteDocument(document, relationManager, zipfs);
+        }
+
+        InputStream fs = new FileInputStream(resultPath.toString());
+        XWPFDocument xwpfDocument = new XWPFDocument(OPCPackage.open(fs));
+        xwpfDocument.enforceUpdateFields();
+        xwpfDocument.write(new FileOutputStream(new File(resultPath.toString())));
+        fs.close();
+    }
+
+    private void replaceRootFile(FileSystem zipfs) {
+        try {
+            java.net.URL url = this.getClass().getResource("/templates/[Content_Types].xml");
+            Path resPath = Paths.get(url.toURI());
+            Files.copy(Files.newInputStream(resPath), zipfs.getPath("/[Content_Types].xml"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (URISyntaxException | IOException e) {
+            logger.error("Something went wrong", e);
         }
     }
 
@@ -77,13 +97,13 @@ public class DocxMaker {
         Files.copy(new ByteArrayInputStream(xmlDocument.toByteArray()), zipfs.getPath("/word/document.xml"), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private void renderAndWriteHader4(Document document, RelationManager relationManager, FileSystem zipfs) throws IOException {
+    private void renderAndWriteHader4(Document document, FileSystem zipfs) throws IOException {
         ByteArrayOutputStream header4Data = new ByteArrayOutputStream(10240);
         renderInfo(document, header4Data, "templates/header4.twig");
         Files.copy(new ByteArrayInputStream(header4Data.toByteArray()), zipfs.getPath("/word/header4.xml"), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    private void renderAndWriteHeader2(Document document, RelationManager relationManager, FileSystem zipfs) throws IOException {
+    private void renderAndWriteHeader2(Document document, FileSystem zipfs) throws IOException {
         ByteArrayOutputStream header2Data = new ByteArrayOutputStream(10240);
         renderInfo(document, header2Data, "templates/header2.twig");
 

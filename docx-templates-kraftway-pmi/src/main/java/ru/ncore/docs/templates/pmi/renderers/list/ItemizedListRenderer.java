@@ -1,7 +1,8 @@
-package ru.ncore.docs.templates.pmi.renderers;
+package ru.ncore.docs.templates.pmi.renderers.list;
 
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
+import ru.ncore.docs.templates.pmi.renderers.ParaRenderer;
 
 import java.io.OutputStream;
 

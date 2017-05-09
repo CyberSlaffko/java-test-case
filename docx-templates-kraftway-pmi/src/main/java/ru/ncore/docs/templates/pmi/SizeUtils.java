@@ -1,5 +1,9 @@
 package ru.ncore.docs.templates.pmi;
 
+import com.sun.glass.ui.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,6 +12,7 @@ import java.util.regex.Pattern;
  * Created by Вячеслав Молоков on 03.05.2017.
  */
 public abstract class SizeUtils {
+    private static final Logger logger = LoggerFactory.getLogger(Size.class);
 
     private static Pattern SIZE_SIMPLE = Pattern.compile("^(\\d+(\\.\\d+)?)$");
     private static Pattern SIZE_CM = Pattern.compile("^(\\d+(\\.\\d+)?)cm$");
@@ -37,6 +42,8 @@ public abstract class SizeUtils {
         if (mmMatch.find()) {
             return Double.parseDouble(mmMatch.group(1)) / 10;
         }
+
+        logger.error(String.format("Unknown size dimensions: %s", s));
         return 0.0f;
     }
 }

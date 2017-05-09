@@ -1,4 +1,4 @@
-package ru.ncore.docs.docbook.parser;
+package ru.ncore.docs.docbook.parser.image;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

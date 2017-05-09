@@ -1,4 +1,4 @@
-package ru.ncore.docs.templates.pmi.renderers;
+package ru.ncore.docs.templates.pmi.renderers.list;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;

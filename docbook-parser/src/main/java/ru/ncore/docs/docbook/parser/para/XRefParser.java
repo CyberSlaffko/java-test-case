@@ -1,4 +1,4 @@
-package ru.ncore.docs.docbook.parser;
+package ru.ncore.docs.docbook.parser.para;
 
 import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
 import org.slf4j.Logger;

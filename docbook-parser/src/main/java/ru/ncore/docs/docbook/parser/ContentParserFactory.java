@@ -5,17 +5,29 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.parser.algorithms.LeafContentParserAlgorithm;
+import ru.ncore.docs.docbook.parser.image.FigureParser;
+import ru.ncore.docs.docbook.parser.image.ImageDataParser;
+import ru.ncore.docs.docbook.parser.para.PhraseParser;
+import ru.ncore.docs.docbook.parser.para.PlainTextParser;
+import ru.ncore.docs.docbook.parser.para.XRefParser;
+import ru.ncore.docs.docbook.parser.table.*;
 import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import static ru.ncore.docs.docbook.document.ChapterContent.Type;
 import static ru.ncore.docs.docbook.document.ChapterContent.Type.*;
 
 /**
- * Created by Вячеслав Молоков on 29.04.2017.
+ * Фабрика для определения конкретного парсера для указанного узла XML-документа
  */
 public class ContentParserFactory {
     final static Logger logger = LoggerFactory.getLogger(ContentParserFactory.class);
 
+    /**
+     * Определяет парсер для указанного элемента contentNode
+     * @param contentNode Узел XML-документа для которого нужно получить парсер
+     * @param document Документ, который обрабатывается
+     * @return null если парсер не найден, иначе возвращается подходящий парсер
+     */
     public static IContentParser getParserFor(Node contentNode, Document document) {
         IContentParser iContentParser = __getParserFor(contentNode, document);
 
@@ -26,22 +38,32 @@ public class ContentParserFactory {
         return iContentParser.setNode(contentNode).setDocument(document);
     }
 
-    public static IContentParser __getParserFor(Node contentNode, Document document) {
+    private static IContentParser __getParserFor(Node contentNode, Document document) {
         switch (contentNode.getNodeName()) {
             case "section":
                 return new SectionParser();
             case "#text":
                 return new PlainTextParser();
+            case "para":
+                return new ObjectParser(PARA);
             case "xref":
                 return new XRefParser();
+            case "entry":
+                return new TableEntryParser();
             case "table":
                 return new TableParser();
+            case "tgroup":
+                return new TGroupParser();
+            case "thead":
+                return new THeadParser();
+            case "row":
+                return new ObjectParser(TABLE_ROW);
+            case "colspec":
+                return new TableColspecParser();
             case "figure":
                 return new FigureParser();
             case "programlisting":
                 return new ProgramListingParser();
-            case "para":
-                return new ObjectParser(PARA);
             case "mediaobject":
                 return new ObjectParser(MEDIAOBJECT);
             case "imageobject":

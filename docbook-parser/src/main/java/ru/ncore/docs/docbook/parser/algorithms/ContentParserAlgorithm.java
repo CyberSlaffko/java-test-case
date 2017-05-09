@@ -1,7 +1,10 @@
 package ru.ncore.docs.docbook.parser.algorithms;
 
 import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.document.ChapterContent;
@@ -17,6 +20,7 @@ import static ru.ncore.docs.docbook.document.ChapterContent.Type.TABLE;
  * Created by Вячеслав Молоков on 06.05.2017.
  */
 public abstract class ContentParserAlgorithm extends IContentParser {
+    private static final Logger logger = LoggerFactory.getLogger(ContentParserAlgorithm.class);
     protected int currentLevel;
     protected ChapterContent.ChapterType chapterType;
 
@@ -64,11 +68,18 @@ public abstract class ContentParserAlgorithm extends IContentParser {
     }
 
     protected void parseAttributes(ChapterContent content) {
-        Attr attr = ((DeferredElementNSImpl) xmlDocument).getAttributeNode("xml:id");
-        if (null != attr) {
-            String xrefLink = MD5Utils.HexMD5ForString(attr.getValue());
-            content.setBookmarkId(xrefLink);
-            document.addLink(xrefLink, getType());
+        NamedNodeMap attributes = xmlDocument.getAttributes();
+        for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
+            Node item = attributes.item(attrIndex);
+            switch(item.getNodeName()) {
+                case "xml:id":
+                    String xrefLink = MD5Utils.HexMD5ForString(item.getNodeValue());
+                    content.setBookmarkId(xrefLink);
+                    document.addLink(xrefLink, getType());
+                    break;
+                default:
+                    logger.info(String.format("Tag %s - Unknown attribute %s with value %s", xmlDocument.getLocalName(), item.getNodeName(), item.getNodeValue()));
+            }
         }
     }
 

@@ -1,8 +1,6 @@
 package ru.ncore.docs.docbook.document;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Содержимое документа (кроме
@@ -14,14 +12,22 @@ public class ChapterContent {
     private int level;
     private Type type;
     private ChapterType chapterType;
+
+    public Map<String, String> getAdditionalAttributes() {
+        return additionalAttributes;
+    }
+
+    private Map<String, String> additionalAttributes = new HashMap<>();
     private List<ChapterContent> contentList = new ArrayList<>();
     public ChapterContent() {
         uuid = UUID.randomUUID().toString();
     }
 
     /**
-     * Если getType == IMAGEDATA, то в это путь до картинки в Docbook
-     * @return
+     * В зависимости от результата getType()
+     *   - IMAGEDATA - это путь до картинки в Docbook
+     *   - TGROUP - это количество столбцов
+     * @return Заголовок или значение специального поля
      */
     public String getTitle() {
         return title;
@@ -55,6 +61,7 @@ public class ChapterContent {
         return uuid;
     }
 
+
     public String getBookmarkId() {
         if (null == bookmarkId || bookmarkId.isEmpty()) {
             return uuid;
@@ -84,6 +91,15 @@ public class ChapterContent {
 
     public boolean isImage() {
         return type == Type.MEDIAOBJECT || type == Type.FIGURE;
+    }
+
+    /**
+     * Позволяет добавлять дополнительные аттрибуты к содержимому
+     * @param attr Название аттрибута
+     * @param value Значение аттрибута
+     */
+    public void addAdditionalAttribute(String attr, String value) {
+        additionalAttributes.put(attr, value);
     }
 
     /**
@@ -125,13 +141,11 @@ public class ChapterContent {
 
         TABLE_INFO, TABLE_HEAD, TABLE_ROW, TABLE_CELL,
 
-        /**
-         * Вспомогательный элемент. Используется как концевой. Обозначает ширину таблицы, картики и т.п.
-         */
-        WIDTH
+        TGROUP,
+        TABLE_COLSPEC
     }
 
     public enum ChapterType {
-        ANNOTATION, CHAPTER, APPENDIX
+        ANNOTATION, CHAPTER, APPENDIX, TABLE, TABLE_HEAD
     }
 }

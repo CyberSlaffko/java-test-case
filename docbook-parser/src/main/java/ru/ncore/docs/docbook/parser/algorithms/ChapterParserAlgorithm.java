@@ -1,7 +1,8 @@
 package ru.ncore.docs.docbook.parser.algorithms;
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
-import org.w3c.dom.Attr;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.Document;
@@ -14,9 +15,12 @@ import ru.ncore.docs.docbook.utils.XMLUtils;
 import java.util.List;
 
 /**
- * Created by Вячеслав Молоков on 05.05.2017.
+ * Алгоритм разбора глав, аннотации, приложений
+ *
+ * Предназначен для унификации разбора узлов документа, у которых есть вложенный тег title
  */
 public abstract class ChapterParserAlgorithm {
+    private static final Logger logger = LoggerFactory.getLogger(ChapterParserAlgorithm.class);
     private org.w3c.dom.Document xmlDocument;
     private Document document;
 
@@ -27,6 +31,10 @@ public abstract class ChapterParserAlgorithm {
     public void parse(Document document) {
         this.document = document;
         NodeList nodes = XMLUtils.getNodes(xmlDocument, xpath());
+
+        if(nodes == null) {
+            return;
+        }
 
         List<ChapterContent> chaptersList = getDataList(document);
 
@@ -46,14 +54,24 @@ public abstract class ChapterParserAlgorithm {
         List<ChapterContent> contentList = chapter.getContentList();
         int nextLevel = chapter.getLevel() + 1;
 
-        Attr attr = ((DeferredElementNSImpl) chapterNode).getAttributeNode("xml:id");
-        if (null != attr) {
-            String xrefLink = MD5Utils.HexMD5ForString(attr.getValue());
-            chapter.setBookmarkId(xrefLink);
-            document.addLink(xrefLink, getType());
+        NamedNodeMap attributes = chapterNode.getAttributes();
+        for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
+            Node item = attributes.item(attrIndex);
+            switch(item.getNodeName()) {
+                case "xml:id":
+                    String xrefLink = MD5Utils.HexMD5ForString(item.getNodeValue());
+                    chapter.setBookmarkId(xrefLink);
+                    document.addLink(xrefLink, getType());
+                    break;
+                default:
+                    logger.info(String.format("Tag %s - Unknown attribute %s with value %s", xmlDocument.getLocalName(), item.getNodeName(), item.getNodeValue()));
+            }
         }
 
         NodeList nodes = XMLUtils.getNodes(chapterNode, "./*");
+        if (nodes == null) {
+            return chapter;
+        }
         for (int i = 0; i < nodes.getLength(); i++) {
             Node contentNode = nodes.item(i);
 
