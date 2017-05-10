@@ -13,6 +13,7 @@ import ru.ncore.docs.docbook.utils.MD5Utils;
  */
 public class TableEntryParser extends ContentParserAlgorithm {
     private final static Logger logger = LoggerFactory.getLogger(TableEntryParser.class);
+
     @Override
     protected void parseAttributes(ChapterContent content) {
         NamedNodeMap attributes = xmlDocument.getAttributes();

@@ -15,6 +15,20 @@ import java.io.OutputStream;
 public class TableRenderer extends IContentRenderer {
     @Override
     public void render(OutputStream wordDocumentData) {
+        renderTitle(wordDocumentData);
+
+        for(ChapterContent subContent : contentData.getContentList()) {
+            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document, relationManager);
+            if (null != renderer) {
+                renderer.render(wordDocumentData);
+            }
+        }
+    }
+
+    private void renderTitle(OutputStream wordDocumentData) {
+        if (null == contentData.getTitle() || contentData.getTitle().isEmpty()) {
+            return;
+        }
         String templatePath = "templates/document/table/table_title.twig";
 
         JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
@@ -24,12 +38,5 @@ public class TableRenderer extends IContentRenderer {
         model.with("uuid", contentData.getBookmarkId());
 
         template.render(model, wordDocumentData);
-
-        for(ChapterContent subContent : contentData.getContentList()) {
-            IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document, relationManager);
-            if (null != renderer) {
-                renderer.render(wordDocumentData);
-            }
-        }
     }
 }

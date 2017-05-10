@@ -63,6 +63,17 @@ public abstract class ChapterParserAlgorithm {
                     chapter.setBookmarkId(xrefLink);
                     document.addLink(xrefLink, getType());
                     break;
+                case "role":
+                    chapter.addAdditionalAttribute("role", item.getNodeValue());
+                    break;
+                case "xml:base":
+                case "xml:lang":
+                case "xmlns":
+                case "xmlns:xi":
+                case "xmlns:xlink":
+                case "version":
+                    // NOOP
+                    break;
                 default:
                     logger.info(String.format("Tag %s - Unknown attribute %s with value %s", xmlDocument.getLocalName(), item.getNodeName(), item.getNodeValue()));
             }

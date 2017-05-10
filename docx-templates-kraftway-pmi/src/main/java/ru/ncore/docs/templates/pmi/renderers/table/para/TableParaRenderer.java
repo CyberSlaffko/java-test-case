@@ -55,12 +55,20 @@ public class TableParaRenderer extends ru.ncore.docs.templates.pmi.renderers.tab
             return false;
         }
 
+//        boolean rendered = false;
+//        for (ChapterContent chapterContent : innerContent.getContentList()) {
+//            ITableContentRenderer renderer = TableCellRendererFactory.getRenderer(chapterContent, document, relationManager);
+//            if (null != renderer) {
+//                renderer.render(innerData, width, style);
+//                rendered = true;
+//            }
+//        }
         ITableContentRenderer renderer = TableCellRendererFactory.getRenderer(innerContent, document, relationManager);
         if (null != renderer) {
             renderer.render(innerData, width, style);
             return true;
         }
 
-        return false;
+        return true;
     }
 }

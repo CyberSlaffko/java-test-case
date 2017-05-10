@@ -122,23 +122,35 @@ public class TGroupRenderer extends IContentRenderer {
     }
 
     private void renderTc(long width, List<ChapterContent> childContent, String instructions, ByteArrayOutputStream tableOutputStream, final String style) {
+        // При вводе ввели <entry> </entry>
+        if(childContent.size() == 1 && childContent.get(0).getType() == ChapterContent.Type.TEXT && childContent.get(0).getTitle().isEmpty()) {
+            logger.info("Rendering table entity without content (case <entry> </entry>)");
+            childContent.get(0).setTitle(" ");
+        }
+
+        // При вводе ввели <entry />
         if(childContent.size() == 0) {
-            logger.info("Rendering table entity without content");
+            logger.info("Rendering table entity without content (case <entry />)");
             ChapterContent chapterContent = new ChapterContent();
             chapterContent.setType(ChapterContent.Type.TEXT);
             chapterContent.setTitle(" ");
             childContent.add(chapterContent);
         }
+
         ByteArrayOutputStream contentBuffer = new ByteArrayOutputStream();
         for (ChapterContent chapterContent : childContent) {
             ChapterContent renderMe = chapterContent;
             switch (chapterContent.getType()) {
                 case XREF:
+                case PHRASE:
                 case TEXT:
                     ChapterContent paraWrapper = new ChapterContent();
                     paraWrapper.setType(ChapterContent.Type.PARA);
                     paraWrapper.getContentList().add(chapterContent);
                     renderMe = paraWrapper;
+                    break;
+                default:
+                    logger.warn(String.format("Unknown tag in table cell: %s", chapterContent.getType()));
             }
 
             ITableContentRenderer renderer = TableCellRendererFactory.getRenderer(renderMe, document, relationManager);

@@ -17,6 +17,7 @@ import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.List;
+import java.util.Objects;
 
 public class DocxMaker {
     static final private Logger logger = LoggerFactory.getLogger(DocxMaker.class);
@@ -131,8 +132,14 @@ public class DocxMaker {
         JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 
+        String style = "15";
+        if (Objects.equals(chapter.getAdditionalAttributes().getOrDefault("role", ""), "Unnumbered")) {
+            style = "aff6";
+        }
+
         model.with("title", chapter.getTitle());
-        model.with("uuid", chapter.getUuid());
+        model.with("uuid", chapter.getBookmarkId());
+        model.with("style", style);
 
         template.render(model, wordDocumentData);
 

@@ -22,7 +22,7 @@ public class ChapterParser extends ChapterParserAlgorithm {
 
     @Override
     protected String xpath() {
-        return "/d:book/d:chapter";
+        return "/d:book/d:chapter|/d:book/d:glossary";
     }
 
     @Override
