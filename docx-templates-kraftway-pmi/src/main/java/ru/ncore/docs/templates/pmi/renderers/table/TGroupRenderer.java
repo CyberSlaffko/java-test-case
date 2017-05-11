@@ -124,13 +124,13 @@ public class TGroupRenderer extends IContentRenderer {
     private void renderTc(long width, List<ChapterContent> childContent, String instructions, ByteArrayOutputStream tableOutputStream, final String style) {
         // При вводе ввели <entry> </entry>
         if(childContent.size() == 1 && childContent.get(0).getType() == ChapterContent.Type.TEXT && childContent.get(0).getTitle().isEmpty()) {
-            logger.info("Rendering table entity without content (case <entry> </entry>)");
+            logger.debug("Rendering table entity without content (case <entry> </entry>)");
             childContent.get(0).setTitle(" ");
         }
 
         // При вводе ввели <entry />
         if(childContent.size() == 0) {
-            logger.info("Rendering table entity without content (case <entry />)");
+            logger.debug("Rendering table entity without content (case <entry />)");
             ChapterContent chapterContent = new ChapterContent();
             chapterContent.setType(ChapterContent.Type.TEXT);
             chapterContent.setTitle(" ");
@@ -148,6 +148,10 @@ public class TGroupRenderer extends IContentRenderer {
                     paraWrapper.setType(ChapterContent.Type.PARA);
                     paraWrapper.getContentList().add(chapterContent);
                     renderMe = paraWrapper;
+                    break;
+                case PARA:
+                case ITEMLIST:
+                    // NOOP
                     break;
                 default:
                     logger.warn(String.format("Unknown tag in table cell: %s", chapterContent.getType()));
