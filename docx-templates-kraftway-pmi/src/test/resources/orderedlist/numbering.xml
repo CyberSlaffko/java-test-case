@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://xsd.org/xml/5.0/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://xsd.org/xml/5.0/rng/xsd.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<?xml-stylesheet type="text/xsl" href="../styles/espd.xsl"?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="ru" version="5.0">
+    <info>
+        <title>Тест нумерованных списков</title>
+        <titleabbrev>шифр ТТТ</titleabbrev>
+        <pubdate>2017</pubdate>
+    </info>
+
+    <chapter>
+        <title>Глава 1</title>
+        <section>
+            <title>Состав меню</title>
+
+            <para>В состав дистрибутива входят следующие файлы:
+                <orderedlist>
+                    <listitem>
+                        <para>&lt;sources.zip&gt; - архив, содержащий файлы с текстом программы на исходном языке;
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>&lt;sources.md5&gt; - файл с хеш-суммой (128-битный алгоритм хеширования);</para>
+                    </listitem>
+                    <listitem>
+                        <para>&lt;sources.sha&gt; - файл с хеш-суммой (алгоритм хеширования SHA).</para>
+                    </listitem>
+                </orderedlist>
+            </para>
+
+            <para>А также:
+                <orderedlist continuation="restarts">
+                    <listitem>
+                        <para>&lt;package.zip&gt; - архив, содержащий файлы с текстом программы на исходном языке;
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>&lt;package.md5&gt; - файл с хеш-суммой (128-битный алгоритм хеширования);</para>
+                    </listitem>
+                    <listitem>
+                        <para>&lt;package.sha&gt; - файл с хеш-суммой (алгоритм хеширования SHA).</para>
+                    </listitem>
+                </orderedlist>
+            </para>
+        </section>
+    </chapter>
+</book>
