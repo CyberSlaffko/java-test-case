@@ -1,6 +1,6 @@
 package ru.ncore.docs.docbook.parser.algorithms;
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
+//import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;

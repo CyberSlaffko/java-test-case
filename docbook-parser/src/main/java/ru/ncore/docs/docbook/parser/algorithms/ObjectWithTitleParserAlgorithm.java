@@ -1,6 +1,6 @@
 package ru.ncore.docs.docbook.parser.algorithms;
 
-import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
+//import com.sun.org.apache.xerces.internal.dom.DeferredElementNSImpl;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
