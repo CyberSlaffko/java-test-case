@@ -24,9 +24,11 @@ public class DocxMaker {
     private static final String WORD_RELS_DOCUMENT_XML_RELS = "/word/_rels/document.xml.rels";
 
     public void makeDocument(Document document, Path resultPath) throws URISyntaxException, IOException, InvalidFormatException {
-        java.net.URL url = this.getClass().getResource("/template.docx");
-        Path resPath = Paths.get(url.toURI());
-        Files.copy(Files.newInputStream(resPath), resultPath, StandardCopyOption.REPLACE_EXISTING);
+        //java.net.URL url = this.getClass().getResource("/template.docx");
+        //Path resPath = Paths.get(url.toURI());
+        //Files.copy(Files.newInputStream(resPath), resultPath, StandardCopyOption.REPLACE_EXISTING);
+        InputStream tplStream = getClass().getResourceAsStream("/template.docx");
+        Files.copy(tplStream, resultPath, StandardCopyOption.REPLACE_EXISTING);
 
         try (FileSystem zipfs = FileSystems.newFileSystem(resultPath, null)) {
             replaceRootFile(zipfs);
@@ -46,10 +48,12 @@ public class DocxMaker {
 
     private void replaceRootFile(FileSystem zipfs) {
         try {
-            java.net.URL url = this.getClass().getResource("/templates/[Content_Types].xml");
-            Path resPath = Paths.get(url.toURI());
-            Files.copy(Files.newInputStream(resPath), zipfs.getPath("/[Content_Types].xml"), StandardCopyOption.REPLACE_EXISTING);
-        } catch (URISyntaxException | IOException e) {
+            //java.net.URL url = this.getClass().getResource("/templates/[Content_Types].xml");
+            //Path resPath = Paths.get(url.toURI());
+            //Files.copy(Files.newInputStream(resPath), zipfs.getPath("/[Content_Types].xml"), StandardCopyOption.REPLACE_EXISTING);
+            InputStream resStream = getClass().getResourceAsStream("/templates/[Content_Types].xml");
+            Files.copy(resStream, zipfs.getPath("/[Content_Types].xml"), StandardCopyOption.REPLACE_EXISTING);
+        } catch (/*URISyntaxException |*/ IOException e) {
             logger.error("Something went wrong", e);
         }
     }

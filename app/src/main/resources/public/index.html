@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Docbook Converter</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/jquery-ui/1.12.1/jquery-ui.theme.min.css">
+    <link rel="stylesheet" type="text/css" href="/webjars/jquery-ui/1.12.1/jquery-ui.min.css">
+</head>
+<body style="margin: 10px">
+
+<div id="input_data">
+    <form id="data_form" method="post">
+        <label>Source URL: <input name="src" id="srcURL" value="" /></label>
+        <label>Template URL: <input name="tpl" id="tplURL" value="" /></label>
+        <label>Params: <input name="params" id="params" value="" /></label>
+        <label>Type: <select id="outFormat"><option value="docx" selected>DOCX</option><option value="pdf">PDF</option></select></label>
+        <button type="submit">Convert</button>
+     </form>
+</div>
+
+<script type="text/javascript" src="/webjars/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    function setFormAction() {
+        $("#data_form").attr("action", "converter/" + $("#outFormat").val());
+    }
+
+    $(function () {
+        $("#outFormat").change(function (evt) {
+            setFormAction();
+        });
+
+        setFormAction();
+    });
+
+</script>
+</body>
+</html>

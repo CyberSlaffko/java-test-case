@@ -13,12 +13,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <junit.version>5.0.0</junit.version>
+        <slf4j.version>1.8.0-alpha2</slf4j.version>
     </properties>
     
     <modules>
         <module>docbook-parser</module>
         <module>docx-writer</module>
         <module>docx-templates-kraftway-pmi</module>
+        <module>pdf-converter</module>
         <module>app</module>
     </modules>
 
@@ -41,6 +43,11 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>pdf-converter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>app</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -57,14 +64,14 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.8.0-alpha2</version>
+            <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.8.0-alpha2</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.jetbrains.spek</groupId>-->
             <!--<artifactId>spek-junit-platform-engine</artifactId>-->
