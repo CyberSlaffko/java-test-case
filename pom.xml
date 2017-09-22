@@ -15,7 +15,7 @@
         <junit.version>5.0.0</junit.version>
         <slf4j.version>1.8.0-alpha2</slf4j.version>
     </properties>
-    
+
     <modules>
         <module>docbook-parser</module>
         <module>docx-writer</module>
@@ -116,7 +116,7 @@
             </plugins>
         </pluginManagement>
     </build>
-    
+
     <repositories>
         <repository>
             <id>jcenter</id>

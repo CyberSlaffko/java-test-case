@@ -13,10 +13,11 @@ import ru.ncore.docs.docbook.utils.MD5Utils;
 import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Алгоритм разбора глав, аннотации, приложений
- *
+ * <p>
  * Предназначен для унификации разбора узлов документа, у которых есть вложенный тег title
  */
 public abstract class ChapterParserAlgorithm {
@@ -28,11 +29,11 @@ public abstract class ChapterParserAlgorithm {
         this.xmlDocument = xmlDocument;
     }
 
-    public void parse(Document document) {
+    public void parse(Document document, AtomicInteger seq) {
         this.document = document;
         NodeList nodes = XMLUtils.getNodes(xmlDocument, xpath());
 
-        if(nodes == null) {
+        if (nodes == null) {
             return;
         }
 
@@ -57,7 +58,7 @@ public abstract class ChapterParserAlgorithm {
         NamedNodeMap attributes = chapterNode.getAttributes();
         for (int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++) {
             Node item = attributes.item(attrIndex);
-            switch(item.getNodeName()) {
+            switch (item.getNodeName()) {
                 case "xml:id":
                     String xrefLink = MD5Utils.HexMD5ForString(item.getNodeValue());
                     chapter.setBookmarkId(xrefLink);

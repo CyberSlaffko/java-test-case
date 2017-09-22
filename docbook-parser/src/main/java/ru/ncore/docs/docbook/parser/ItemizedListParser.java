@@ -6,6 +6,7 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
@@ -27,7 +28,6 @@ public class ItemizedListParser extends IContentParser {
         itemizedList.setType(listType);
         itemizedList.setChapterType(chapterType);
         itemizedList.setLevel(1);
-
         NodeList nodes = XMLUtils.getNodes(xmlDocument, "./d:listitem");
         List<ChapterContent> listItems = itemizedList.getContentList();
         for (int i = 0; i < nodes.getLength(); i++) {

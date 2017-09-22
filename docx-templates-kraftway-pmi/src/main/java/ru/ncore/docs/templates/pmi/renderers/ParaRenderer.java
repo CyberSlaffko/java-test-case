@@ -11,6 +11,7 @@ import ru.ncore.docs.templates.pmi.IContentRenderer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 import static ru.ncore.docs.docbook.document.ChapterContent.Type.XREF;
 
@@ -23,12 +24,17 @@ public class ParaRenderer extends IContentRenderer {
 
     @Override
     public void render(OutputStream wordDocumentData) {
+        this.render(wordDocumentData, null);
+    }
+
+    @Override
+    public void render(OutputStream wordDocumentData, Map<String, String> additional) {
         OutputStream innerData = new ByteArrayOutputStream(1024);
         boolean rendered = innerParaRender(innerData, contentData, templateFor(contentData));
 
-        for(ChapterContent innerContent : contentData.getContentList()) {
+        for (ChapterContent innerContent : contentData.getContentList()) {
             if (innerContent.isList() || innerContent.isTable() || innerContent.isImage()) {
-                closePara(wordDocumentData, innerData, rendered);
+                closePara(wordDocumentData, innerData, rendered, additional);
                 innerData = new ByteArrayOutputStream(1024);
                 rendered = false;
 
@@ -36,21 +42,29 @@ public class ParaRenderer extends IContentRenderer {
                 if (null != renderer) {
                     renderer.render(wordDocumentData);
                 }
-            }
-            else {
+            } else {
                 rendered = innerParaRender(innerData, innerContent, templateFor(innerContent)) || rendered;
             }
         }
 
-        closePara(wordDocumentData, innerData, rendered);
+        closePara(wordDocumentData, innerData, rendered, additional);
     }
 
-    private void closePara(OutputStream wordDocumentData, OutputStream innerData, boolean rendered) {
+    private void closePara(OutputStream wordDocumentData, OutputStream innerData, boolean rendered, Map<String, String> additional) {
         if (rendered) {
             JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
             JtwigModel model = JtwigModel.newModel();
+            if (additional != null) {
+                String n = additional.get("numb");
+                if (n != null) {
+                    model.with("numb", n);
+                }
+                n = additional.get("lvl");
+                if (n != null) {
+                    model.with("lvl", n);
+                }
+            }
             model.with("body", innerData);
-
             template.render(model, wordDocumentData);
         }
     }
