@@ -1,6 +1,10 @@
 <w:p w:rsidP="00895325" w:rsidR="006A09D9" w:rsidRDefault="006A09D9" w:rsidRPr="006A09D9">
-<w:pPr>
-                <w:pStyle w:val="1" />
-            </w:pPr>
-            {{body}}
-        </w:p>
+    <w:pPr>
+        <w:pStyle w:val="1"/>
+        <w:numPr>
+            <w:ilvl w:val="{{ lvl }}"/>
+            <w:numId w:val="{{ numb }}"/>
+        </w:numPr>
+    </w:pPr>
+    {{ body }}
+</w:p>

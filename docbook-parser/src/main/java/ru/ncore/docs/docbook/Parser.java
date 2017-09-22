@@ -17,6 +17,7 @@ import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Вячеслав Молоков on 29.04.2017.
@@ -57,9 +58,10 @@ public class Parser {
     }
 
     private void parseXmlDocument() {
+        AtomicInteger seq = new AtomicInteger(0);
         new DocumentInfoParser(xmlDocument).parse(document);
         new AnnotationParser(xmlDocument).parse(document);
-        new ChapterParser(xmlDocument).parse(document);
-        new AppendixParser(xmlDocument).parse(document);
+        new ChapterParser(xmlDocument).parse(document, seq);
+        new AppendixParser(xmlDocument).parse(document, seq);
     }
 }

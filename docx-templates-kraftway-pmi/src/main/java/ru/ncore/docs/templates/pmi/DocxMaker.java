@@ -1,15 +1,13 @@
 package ru.ncore.docs.templates.pmi;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.jtwig.JtwigModel;
 import org.jtwig.JtwigTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.Document;
 import ru.ncore.docs.docbook.document.ChapterContent;
+import ru.ncore.docs.templates.pmi.numbering.NumberingExtender;
 import ru.ncore.docs.templates.pmi.rel.Media;
 import ru.ncore.docs.templates.pmi.rel.RelationManager;
 
@@ -18,6 +16,7 @@ import java.net.URISyntaxException;
 import java.nio.file.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DocxMaker {
     static final private Logger logger = LoggerFactory.getLogger(DocxMaker.class);
@@ -34,6 +33,8 @@ public class DocxMaker {
             renderAndWriteRelations(document, relationManager, zipfs);
             renderAndWriteHeader2(document, zipfs);
             renderAndWriteHader4(document, zipfs);
+            // Добавляем нумераторы для списков
+            this.calcAndWriteNumbering(document, zipfs);
             renderAndWriteDocument(document, relationManager, zipfs);
         }
 
@@ -56,7 +57,7 @@ public class DocxMaker {
 
     private void renderAndWriteRelations(Document document, RelationManager relationManager, FileSystem zipfs) throws IOException {
         Files.createDirectory(zipfs.getPath("/word/media/"));
-        for(String imgPath : document.getImages()) {
+        for (String imgPath : document.getImages()) {
             Media media = relationManager.addRelation(imgPath);
             Files.copy(new ByteArrayInputStream(media.toPNG().toByteArray()), zipfs.getPath("/word/", media.getPath()), StandardCopyOption.REPLACE_EXISTING);
         }
@@ -112,6 +113,14 @@ public class DocxMaker {
         Files.copy(new ByteArrayInputStream(header2Data.toByteArray()), zipfs.getPath("/word/header2.xml"), StandardCopyOption.REPLACE_EXISTING);
     }
 
+
+    private void calcAndWriteNumbering(Document document, FileSystem zipfs) throws IOException {
+        final String fileName = "/word/numbering.xml";
+        NumberingExtender ne = new NumberingExtender(document, zipfs,fileName);
+        ne.calc();
+        ne.save();
+    }
+
     private void renderToc(OutputStream wordDocumentData) {
         JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/document/toc.twig");
         JtwigModel model = JtwigModel.newModel();
@@ -147,7 +156,7 @@ public class DocxMaker {
     }
 
     private void renderChapterContent(Document document, RelationManager relationManager, List<ChapterContent> contentList, OutputStream wordDocumentData) {
-        for(ChapterContent contentData : contentList) {
+        for (ChapterContent contentData : contentList) {
             IContentRenderer renderer = ContentRendererFactory.getRenderer(contentData, document, relationManager);
             if (null != renderer) {
                 renderer.render(wordDocumentData);

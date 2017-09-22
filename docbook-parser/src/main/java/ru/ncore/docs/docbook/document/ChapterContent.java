@@ -12,6 +12,7 @@ public class ChapterContent {
     private int level;
     private Type type;
     private ChapterType chapterType;
+    private int numberingId;
 
     public Map<String, String> getAdditionalAttributes() {
         return additionalAttributes;
@@ -19,14 +20,16 @@ public class ChapterContent {
 
     private Map<String, String> additionalAttributes = new HashMap<>();
     private List<ChapterContent> contentList = new ArrayList<>();
+
     public ChapterContent() {
         uuid = String.valueOf(UUID.randomUUID().hashCode());
     }
 
     /**
      * В зависимости от результата getType()
-     *   - IMAGEDATA - это путь до картинки в Docbook
-     *   - TGROUP - это количество столбцов
+     * - IMAGEDATA - это путь до картинки в Docbook
+     * - TGROUP - это количество столбцов
+     *
      * @return Заголовок или значение специального поля
      */
     public String getTitle() {
@@ -95,11 +98,20 @@ public class ChapterContent {
 
     /**
      * Позволяет добавлять дополнительные аттрибуты к содержимому
-     * @param attr Название аттрибута
+     *
+     * @param attr  Название аттрибута
      * @param value Значение аттрибута
      */
     public void addAdditionalAttribute(String attr, String value) {
         additionalAttributes.put(attr, value);
+    }
+
+    public void setNumberingId(int numberingId) {
+        this.numberingId = numberingId;
+    }
+
+    public int getNumberingId() {
+        return numberingId;
     }
 
     /**

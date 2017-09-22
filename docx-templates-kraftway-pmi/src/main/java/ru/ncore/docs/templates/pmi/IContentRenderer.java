@@ -5,6 +5,8 @@ import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.rel.RelationManager;
 
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Вячеслав Молоков on 03.05.2017.
@@ -15,6 +17,10 @@ public abstract class IContentRenderer {
     protected RelationManager relationManager;
 
     public abstract void render(OutputStream wordDocumentData);
+
+    public void render(OutputStream wordDocumentData, Map<String, String> additional) {
+        this.render(wordDocumentData);
+    }
 
     public IContentRenderer setContent(ChapterContent contentData) {
         this.contentData = contentData;
