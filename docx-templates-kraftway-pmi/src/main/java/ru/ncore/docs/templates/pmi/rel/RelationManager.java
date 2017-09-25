@@ -7,6 +7,7 @@ import ru.ncore.rel.schema.RelationshipType;
 import ru.ncore.rel.schema.RelationshipsType;
 
 import javax.xml.bind.*;
+import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class RelationManager {
             jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
-            relationships = (JAXBElement<RelationshipsType>)unmarshaller.unmarshal(relationFileStream);
+            relationships = unmarshaller.unmarshal(new StreamSource(relationFileStream), RelationshipsType.class);
 
             findMaximumRId();
         } catch (JAXBException e) {

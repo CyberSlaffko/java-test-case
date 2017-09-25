@@ -2,12 +2,12 @@ package ru.ncore.docs.templates.pmi.renderers;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.ContentRendererFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
+import ru.ncore.docs.templates.pmi.TemplateUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -29,12 +29,12 @@ public class ParaRenderer extends IContentRenderer {
 
     @Override
     public void render(OutputStream wordDocumentData, Map<String, String> additional) {
-        OutputStream innerData = new ByteArrayOutputStream(1024);
+        ByteArrayOutputStream innerData = new ByteArrayOutputStream(1024);
         boolean rendered = innerParaRender(innerData, contentData, templateFor(contentData));
 
         for (ChapterContent innerContent : contentData.getContentList()) {
             if (innerContent.isList() || innerContent.isTable() || innerContent.isImage()) {
-                closePara(wordDocumentData, innerData, rendered, additional);
+                closePara(wordDocumentData, new String(innerData.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()), rendered, additional);
                 innerData = new ByteArrayOutputStream(1024);
                 rendered = false;
 
@@ -47,12 +47,11 @@ public class ParaRenderer extends IContentRenderer {
             }
         }
 
-        closePara(wordDocumentData, innerData, rendered, additional);
+        closePara(wordDocumentData, new String(innerData.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()), rendered, additional);
     }
 
-    private void closePara(OutputStream wordDocumentData, OutputStream innerData, boolean rendered, Map<String, String> additional) {
+    private void closePara(OutputStream wordDocumentData, String innerData, boolean rendered, Map<String, String> additional) {
         if (rendered) {
-            JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
             JtwigModel model = JtwigModel.newModel();
             if (additional != null) {
                 String n = additional.get("numb");
@@ -65,7 +64,7 @@ public class ParaRenderer extends IContentRenderer {
                 }
             }
             model.with("body", innerData);
-            template.render(model, wordDocumentData);
+            TemplateUtils.render(templatePath, wordDocumentData, model);
         }
     }
 
@@ -131,13 +130,13 @@ public class ParaRenderer extends IContentRenderer {
             return false;
         }
 
-        JtwigTemplate innerTemplate = JtwigTemplate.classpathTemplate(tmpl);
+        //JtwigTemplate innerTemplate = JtwigTemplate.classpathTemplate(tmpl);
         JtwigModel innerModel = JtwigModel.newModel();
 
         innerModel.with("para", StringEscapeUtils.escapeXml(text));
         innerModel.with("uuid", content.getBookmarkId());
 
-        innerTemplate.render(innerModel, innerData);
+        TemplateUtils.render(tmpl, innerData, innerModel);
         return true;
     }
 

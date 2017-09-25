@@ -1,11 +1,12 @@
 package ru.ncore.docs.templates.pmi.renderers.table;
 
+import org.jtwig.JtwigModel;
 import ru.ncore.docs.docbook.document.ChapterContent;
-import ru.ncore.docs.templates.pmi.renderers.TemplateUtils;
+import ru.ncore.docs.templates.pmi.TemplateUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Вячеслав Молоков on 10.05.2017.
@@ -32,13 +33,14 @@ public class TableItemListItemRenderer extends ITableContentRenderer {
             }
         }
 
-        String buf = contentBuffer.toString();
+        
+        String buf = new String(contentBuffer.toByteArray(), StandardCharsets.UTF_8);
         if (buf.isEmpty()) {
             return;
         }
 
-        TemplateUtils.render("templates/document/table/item_list.twig", wordDocumentData, new HashMap<String, String>(){{
-            put("body", buf);
-        }});
+        TemplateUtils.render("templates/document/table/item_list.twig", wordDocumentData, JtwigModel.newModel()
+            .with("body", buf)
+        );
     }
 }

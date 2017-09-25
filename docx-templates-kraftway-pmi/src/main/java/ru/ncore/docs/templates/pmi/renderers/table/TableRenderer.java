@@ -2,10 +2,10 @@ package ru.ncore.docs.templates.pmi.renderers.table;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.ContentRendererFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
+import ru.ncore.docs.templates.pmi.TemplateUtils;
 
 import java.io.OutputStream;
 
@@ -31,12 +31,12 @@ public class TableRenderer extends IContentRenderer {
         }
         String templatePath = "templates/document/table/table_title.twig";
 
-        JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
+        //JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 
         model.with("title", StringEscapeUtils.escapeXml(contentData.getTitle()));
         model.with("uuid", contentData.getBookmarkId());
 
-        template.render(model, wordDocumentData);
+        TemplateUtils.render(templatePath, wordDocumentData, model);
     }
 }

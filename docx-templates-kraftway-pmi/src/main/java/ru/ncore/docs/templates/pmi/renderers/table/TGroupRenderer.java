@@ -1,17 +1,16 @@
 package ru.ncore.docs.templates.pmi.renderers.table;
 
+import org.jtwig.JtwigModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
 import ru.ncore.docs.templates.pmi.SizeUtils;
-import ru.ncore.docs.templates.pmi.TableColumnWidthCalculator;
-import ru.ncore.docs.templates.pmi.renderers.TemplateUtils;
+import ru.ncore.docs.templates.pmi.TemplateUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,9 +29,9 @@ public class TGroupRenderer extends IContentRenderer {
         ByteArrayOutputStream tableOutputStream = new ByteArrayOutputStream(10240);
         renderTableBody(tableOutputStream);
 
-        TemplateUtils.render("templates/document/table/table.twig", wordDocumentData, new HashMap<String, String>(){{
-            put("body", tableOutputStream.toString());
-        }});
+        TemplateUtils.render("templates/document/table/table.twig", wordDocumentData, JtwigModel.newModel()
+            .with("body", new String(tableOutputStream.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()))
+        );
     }
 
     private void renderTableBody(OutputStream wordDocumentData) {
@@ -45,9 +44,9 @@ public class TGroupRenderer extends IContentRenderer {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        TemplateUtils.render("templates/document/table/grid_wrapper.twig", wordDocumentData, new HashMap<String, String>(){{
-            put("body", tableOutputStream.toString());
-        }});
+        TemplateUtils.render("templates/document/table/grid_wrapper.twig", wordDocumentData, JtwigModel.newModel()
+            .with("body", new String(tableOutputStream.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()))
+        );
 
         renderTableHead(wordDocumentData, ChapterContent.Type.TABLE_HEAD, "afff4", "/templates/document/table/thead_tr.twig");
         renderTableHead(wordDocumentData, ChapterContent.Type.TABLE_BODY, "afffffffffd", "/templates/document/table/tbody_tr.twig");
@@ -115,9 +114,9 @@ public class TGroupRenderer extends IContentRenderer {
             }
             TemplateUtils.render(templatePath,
                     tableOutputStream,
-                    new HashMap<String, String>() {{
-                        put("body", cells.toString());
-                    }});
+                    JtwigModel.newModel()
+                        .with("body", new String(cells.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()))
+            );
         }
     }
 
@@ -163,12 +162,12 @@ public class TGroupRenderer extends IContentRenderer {
             }
         }
 
-        TemplateUtils.render("templates/document/table/tc.twig", tableOutputStream, new HashMap<String, String>(){{
-            put("width", String.valueOf(width));
-            put("instructions", instructions);
-            put("style", style);
-            put("body", contentBuffer.toString());
-        }});
+        TemplateUtils.render("templates/document/table/tc.twig", tableOutputStream, JtwigModel.newModel()
+            .with("width", String.valueOf(width))
+            .with("instructions", instructions)
+            .with("style", style)
+            .with("body", new String(contentBuffer.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()))
+        );
     }
 
 
@@ -190,9 +189,9 @@ public class TGroupRenderer extends IContentRenderer {
     private void renderTblGrid(ByteArrayOutputStream tableOutputStream) {
         for(String column: widthCalculator.getValues()) {
             logger.debug(String.format("Column %s has width %f", column, widthCalculator.getWidthFor(column)));
-            TemplateUtils.render("templates/document/table/grid_item.twig", tableOutputStream, new HashMap<String, String>(){{
-                put("width", String.valueOf(SizeUtils.cmToWordPoints(widthCalculator.getWidthFor(column))));
-            }});
+            TemplateUtils.render("templates/document/table/grid_item.twig", tableOutputStream, JtwigModel.newModel()
+                .with("width", String.valueOf(SizeUtils.cmToWordPoints(widthCalculator.getWidthFor(column))))
+            );
         }
     }
 }

@@ -131,7 +131,7 @@ public class MainController {
                     pdfMaker.generateOut(parameters, srcURL, tplURL, mime, response.getOutputStream());
                     break;
                 case MIME_MSWORD:
-                    generateDocx(srcURL, response.getOutputStream());
+                    generateDocx(srcURL, tplURL, response.getOutputStream());
                     break;
             }
             response.getOutputStream().flush();
@@ -141,13 +141,17 @@ public class MainController {
         }
     }
 
-    public void generateDocx(String srcURL, OutputStream outputStream) throws URISyntaxException, IOException, InvalidFormatException {
-        Path srcPath = Paths.get(new java.net.URL(srcURL).toURI());
-        final Document parseResult = parser.parse(srcPath.toString());
+    public void generateDocx(String srcURL, String tplURL, OutputStream outputStream) throws IOException {
+        final Document parseResult = parser.parse(srcURL);
         Path targetPath = null;
         try {
             targetPath = Files.createTempFile("dbconv", ".docx");
-            docxMaker.makeDocument(parseResult, targetPath);
+
+            if (tplURL == null)
+                docxMaker.makeDocument(parseResult, targetPath);
+            else
+                docxMaker.makeDocument(parseResult, targetPath, tplURL);
+
             Files.copy(targetPath, outputStream);
         } finally {
             if (targetPath != null) Files.deleteIfExists(targetPath);

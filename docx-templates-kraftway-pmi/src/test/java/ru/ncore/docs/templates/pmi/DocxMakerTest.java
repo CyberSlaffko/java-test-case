@@ -128,7 +128,7 @@ public class DocxMakerTest {
 
     private void makeDoc(Path resPath) throws URISyntaxException, IOException, InvalidFormatException {
         Parser parser = new Parser();
-        final Document parseResult = parser.parse(resPath.toString());
+        final Document parseResult = parser.parse(resPath.toUri().toURL().toString());
         DocxMaker maker = new DocxMaker();
         maker.makeDocument(parseResult, java.nio.file.Paths.get(String.format(".\\target\\%s.docx",
                 parseResult.getInfo().getTitle())));

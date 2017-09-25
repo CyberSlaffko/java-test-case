@@ -1,8 +1,8 @@
-package ru.ncore.docs.templates.pmi;
+package ru.ncore.docs.templates.pmi.renderers.table;
 
-import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.ncore.docs.templates.pmi.SizeUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;

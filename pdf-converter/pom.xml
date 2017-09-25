@@ -42,16 +42,20 @@
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
             <version>${apache-fop.version}</version>
-            <!--<exclusions>
+            <exclusions>
                 <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <!--<exclusion>
                     <artifactId>avalon-framework-api</artifactId>
                     <groupId>org.apache.avalon.framework</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>avalon-framework-impl</artifactId>
                     <groupId>org.apache.avalon.framework</groupId>
-                </exclusion>
-            </exclusions>-->
+                </exclusion>-->
+            </exclusions>
             <!--<exclusions>
                 <exclusion>
                     <artifactId>xalan</artifactId>
@@ -73,9 +77,22 @@
         <!-- FOP Dependency end -->
         <dependency>
             <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
+            <scope>runtime</scope>
         </dependency>
+        <!--<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>

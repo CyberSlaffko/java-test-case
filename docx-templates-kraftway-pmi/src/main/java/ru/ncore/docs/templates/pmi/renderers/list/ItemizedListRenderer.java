@@ -22,7 +22,7 @@ public class ItemizedListRenderer extends IContentRenderer {
         String lvl = Integer.toString(this.contentData.getLevel()-1);
 
         for (ChapterContent itemList : contentData.getContentList()) {
-            if (0 <= itemList.getContentList().size()) {
+            if (0 < itemList.getContentList().size()) {
                 ChapterContent content = itemList.getContentList().get(0);
 
                 ParaRenderer paraRenderer = new ParaRenderer();

@@ -1,6 +1,7 @@
 package ru.ncore.docs.templates.pmi;
 
 import org.junit.jupiter.api.Test;
+import ru.ncore.docs.templates.pmi.renderers.table.TableColumnWidthCalculator;
 
 import static org.junit.jupiter.api.Assertions.*;
 

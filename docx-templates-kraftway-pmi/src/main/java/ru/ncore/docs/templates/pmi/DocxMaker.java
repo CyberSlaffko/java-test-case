@@ -1,8 +1,6 @@
 package ru.ncore.docs.templates.pmi;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.Document;
@@ -12,21 +10,28 @@ import ru.ncore.docs.templates.pmi.rel.Media;
 import ru.ncore.docs.templates.pmi.rel.RelationManager;
 
 import java.io.*;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.*;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DocxMaker {
     static final private Logger logger = LoggerFactory.getLogger(DocxMaker.class);
     private static final String WORD_RELS_DOCUMENT_XML_RELS = "/word/_rels/document.xml.rels";
 
-    public void makeDocument(Document document, Path resultPath) throws URISyntaxException, IOException, InvalidFormatException {
-        //java.net.URL url = this.getClass().getResource("/template.docx");
-        //Path resPath = Paths.get(url.toURI());
-        //Files.copy(Files.newInputStream(resPath), resultPath, StandardCopyOption.REPLACE_EXISTING);
-        InputStream tplStream = getClass().getResourceAsStream("/template.docx");
+    public void makeDocument(Document document, Path resultPath) throws IOException {
+        try (InputStream tplStream = getClass().getResourceAsStream("/template.docx")) {
+            makeDocument(document, resultPath, tplStream);
+        }
+    }
+
+    public void makeDocument(Document document, Path resultPath, String templateURL) throws IOException {
+        try (InputStream tplStream = new URL(templateURL).openStream()) {
+            makeDocument(document, resultPath, tplStream);
+        }
+    }
+
+    public void makeDocument(Document document, Path resultPath, InputStream tplStream) throws IOException {
         Files.copy(tplStream, resultPath, StandardCopyOption.REPLACE_EXISTING);
 
         try (FileSystem zipfs = FileSystems.newFileSystem(resultPath, null)) {
@@ -40,27 +45,19 @@ public class DocxMaker {
             renderAndWriteDocument(document, relationManager, zipfs);
         }
 
-//        InputStream fs = new FileInputStream(resultPath.toString());
-//        XWPFDocument xwpfDocument = new XWPFDocument(OPCPackage.open(fs));
-//        xwpfDocument.enforceUpdateFields();
-//        xwpfDocument.write(new FileOutputStream(new File(resultPath.toString())));
-//        fs.close();
     }
 
     private void replaceRootFile(FileSystem zipfs) {
         try {
-            //java.net.URL url = this.getClass().getResource("/templates/[Content_Types].xml");
-            //Path resPath = Paths.get(url.toURI());
-            //Files.copy(Files.newInputStream(resPath), zipfs.getPath("/[Content_Types].xml"), StandardCopyOption.REPLACE_EXISTING);
             InputStream resStream = getClass().getResourceAsStream("/templates/[Content_Types].xml");
             Files.copy(resStream, zipfs.getPath("/[Content_Types].xml"), StandardCopyOption.REPLACE_EXISTING);
-        } catch (/*URISyntaxException |*/ IOException e) {
+        } catch (IOException e) {
             logger.error("Something went wrong", e);
         }
     }
 
     private void renderAndWriteRelations(Document document, RelationManager relationManager, FileSystem zipfs) throws IOException {
-        Files.createDirectory(zipfs.getPath("/word/media/"));
+        Files.createDirectories(zipfs.getPath("/word/media/"));
         for (String imgPath : document.getImages()) {
             Media media = relationManager.addRelation(imgPath);
             Files.copy(new ByteArrayInputStream(media.toPNG().toByteArray()), zipfs.getPath("/word/", media.getPath()), StandardCopyOption.REPLACE_EXISTING);
@@ -82,7 +79,7 @@ public class DocxMaker {
     }
 
     private void renderAndWriteDocument(Document document, RelationManager relationManager, FileSystem zipfs) throws IOException {
-        OutputStream wordDocumentData = new ByteArrayOutputStream(10240);
+        ByteArrayOutputStream wordDocumentData = new ByteArrayOutputStream(10240);
         renderInfo(document, wordDocumentData, "templates/document/title_page.twig");
         renderAnnotation(document, relationManager, wordDocumentData);
         renderToc(wordDocumentData);
@@ -95,12 +92,11 @@ public class DocxMaker {
             renderChapter(document, relationManager, wordDocumentData, chapter, "templates/document/appendix_title.twig");
         }
 
-        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/document.twig");
         JtwigModel model = JtwigModel.newModel();
-        model.with("body", wordDocumentData);
+        model.with("body", new String(wordDocumentData.toByteArray(), TemplateUtils.getCfg().getResourceConfiguration().getDefaultCharset()));
 
         ByteArrayOutputStream xmlDocument = new ByteArrayOutputStream(102400);
-        template.render(model, xmlDocument);
+        TemplateUtils.render("templates/document.twig", xmlDocument, model);
         Files.copy(new ByteArrayInputStream(xmlDocument.toByteArray()), zipfs.getPath("/word/document.xml"), StandardCopyOption.REPLACE_EXISTING);
     }
 
@@ -126,10 +122,9 @@ public class DocxMaker {
     }
 
     private void renderToc(OutputStream wordDocumentData) {
-        JtwigTemplate template = JtwigTemplate.classpathTemplate("templates/document/toc.twig");
         JtwigModel model = JtwigModel.newModel();
 
-        template.render(model, wordDocumentData);
+        TemplateUtils.render("templates/document/toc.twig", wordDocumentData, model);
     }
 
     private void renderAnnotation(Document document, RelationManager relationManager, OutputStream wordDocumentData) {
@@ -142,7 +137,6 @@ public class DocxMaker {
     }
 
     private void renderChapter(Document document, RelationManager relationManager, OutputStream wordDocumentData, ChapterContent chapter, String templatePath) {
-        JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 
         String style = "15";
@@ -154,7 +148,7 @@ public class DocxMaker {
         model.with("uuid", chapter.getBookmarkId());
         model.with("style", style);
 
-        template.render(model, wordDocumentData);
+        TemplateUtils.render(templatePath, wordDocumentData, model);
 
         renderChapterContent(document, relationManager, chapter.getContentList(), wordDocumentData);
     }
@@ -169,7 +163,6 @@ public class DocxMaker {
     }
 
     private void renderInfo(Document document, OutputStream wordDocumentData, String template) {
-        JtwigTemplate titlePageTemplate = JtwigTemplate.classpathTemplate(template);
         JtwigModel titlePageModel = JtwigModel.newModel();
         titlePageModel.with("contractnum", document.getInfo().getContractNum());
         titlePageModel.with("title", document.getInfo().getTitle());
@@ -178,6 +171,6 @@ public class DocxMaker {
         titlePageModel.with("productname", document.getInfo().getProductName());
         titlePageModel.with("issuenum", document.getInfo().getIssueNum());
 
-        titlePageTemplate.render(titlePageModel, wordDocumentData);
+        TemplateUtils.render(template, wordDocumentData, titlePageModel);
     }
 }

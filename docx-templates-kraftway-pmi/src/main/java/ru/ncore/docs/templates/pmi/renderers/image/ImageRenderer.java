@@ -1,13 +1,13 @@
 package ru.ncore.docs.templates.pmi.renderers.image;
 
+import org.jtwig.JtwigModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
 import ru.ncore.docs.templates.pmi.SizeUtils;
-import ru.ncore.docs.templates.pmi.renderers.TemplateUtils;
+import ru.ncore.docs.templates.pmi.TemplateUtils;
 
 import java.io.OutputStream;
-import java.util.HashMap;
 
 /**
  * Рендерер самой картинки.
@@ -30,11 +30,11 @@ public class ImageRenderer extends IContentRenderer {
         logger.debug(String.format("Requested weight/height: %f / %f", requestedWidth, requestedHeight));
 
         String templatePath = "templates/document/image.twig";
-        TemplateUtils.render(templatePath, wordDocumentData, new HashMap<String,String>() {{
-            put("rid", idForImage);
-            put("width", String.valueOf(SizeUtils.cmToWordImagePoints(requestedWidth)));
-            put("height", String.valueOf(SizeUtils.cmToWordImagePoints(requestedHeight)));
-        }});
+        TemplateUtils.render(templatePath, wordDocumentData, JtwigModel.newModel()
+            .with("rid", idForImage)
+            .with("width", String.valueOf(SizeUtils.cmToWordImagePoints(requestedWidth)))
+            .with("height", String.valueOf(SizeUtils.cmToWordImagePoints(requestedHeight)))
+        );
     }
 
     public String getWidth() {

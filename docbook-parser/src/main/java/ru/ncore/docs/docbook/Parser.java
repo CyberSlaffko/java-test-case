@@ -28,8 +28,8 @@ public class Parser {
     Document document;
     org.w3c.dom.Document xmlDocument;
 
-    public Document parse(String fileName) {
-        logger.debug(String.format("Parsing file: %s", fileName));
+    public Document parse(String uri) {
+        logger.debug(String.format("Parsing file: %s", uri));
         try {
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(this.getClass().getResource("/xsd/docbook.xsd"));
@@ -39,10 +39,9 @@ public class Parser {
             dbf.setXIncludeAware(true);
             dbf.setNamespaceAware(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
-            File file = new File(fileName);
-            xmlDocument = db.parse(file);
+            xmlDocument = db.parse(uri);
             xmlDocument.getDocumentElement().normalize();
-            document = new Document(Paths.get(file.getAbsolutePath()).getParent().toString());
+            document = new Document(uri);
 
             parseXmlDocument();
 

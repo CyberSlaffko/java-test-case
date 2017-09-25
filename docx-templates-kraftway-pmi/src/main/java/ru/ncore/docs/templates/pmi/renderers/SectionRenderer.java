@@ -2,12 +2,12 @@ package ru.ncore.docs.templates.pmi.renderers;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jtwig.JtwigModel;
-import org.jtwig.JtwigTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.templates.pmi.ContentRendererFactory;
 import ru.ncore.docs.templates.pmi.IContentRenderer;
+import ru.ncore.docs.templates.pmi.TemplateUtils;
 
 import java.io.OutputStream;
 
@@ -23,14 +23,14 @@ public class SectionRenderer extends IContentRenderer {
             logger.warn(String.format("Too deep section (level %d) -> %s", contentData.getLevel(), contentData.getTitle()));
         }
 
-        JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
+        //JtwigTemplate template = JtwigTemplate.classpathTemplate(templatePath);
         JtwigModel model = JtwigModel.newModel();
 
         model.with("title", StringEscapeUtils.escapeXml(contentData.getTitle()));
         model.with("styleId", getStyleId(contentData.getLevel(), contentData.getChapterType()));
         model.with("uuid", contentData.getBookmarkId());
 
-        template.render(model, wordDocumentData);
+        TemplateUtils.render(templatePath, wordDocumentData, model);
 
         for(ChapterContent subContent : contentData.getContentList()) {
             IContentRenderer renderer = ContentRendererFactory.getRenderer(subContent, document, relationManager);
