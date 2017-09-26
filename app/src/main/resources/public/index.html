@@ -8,7 +8,7 @@
 <body style="margin: 10px">
 
 <div id="input_data">
-    <form id="data_form" method="post">
+    <form id="data_form" method="get">
         <label>Source URL: <input name="src" id="srcURL" value="" /></label>
         <label>Template URL: <input name="tpl" id="tplURL" value="" /></label>
         <label>Params: <input name="params" id="params" value="" /></label>
@@ -21,7 +21,7 @@
 <script type="text/javascript" src="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
 <script>
     function setFormAction() {
-        $("#data_form").attr("action", "converter/" + $("#outFormat").val());
+        $("#data_form").attr("action", "converter/generated." + $("#outFormat").val());
     }
 
     $(function () {

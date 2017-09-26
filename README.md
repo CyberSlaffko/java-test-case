@@ -26,6 +26,43 @@
 
 Данное приложение предназначено для преобразования документов Docbook версии 5 в другие форматы.
 
+## Сборка
+Производится с помощью команды Maven из корневой папки проекта:
+```
+mvnw clean install
+```
+
+## Запуск web-сервиса
+Запуск осуществляется либо с помощью команды Maven'у из корневой папки проекта:
+```
+mvnw spring-boot:run -pl app
+```
+либо непосредственным запуском собранного jar-приложения (он является самозапускаемым со всеми необходимыми зависимостями): 
+```
+java -jar app-1.0-SNAPSHOT.jar
+```
+
+По-умолчанию приложение содержит внедренный сервер Tomcat, запускаемый на порту 8080. Другой порт можно указать с помощью параметра `server.port` через системное свойство или параметр командной строки. Подробнее о конфигурировании приложений spring-boot можно узнать из [документации](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle).
+
+## Использование web-сервиса
+Сервис обслуживает http GET запросы следующего вида:
+```
+/converter/{filename}.{pdf|docx|png}?src={srcUrl}&tpl={tplUrl}&params={params}
+```
+и, если запрос выполняется успешно, возвращает результат в теле ответа. Если случается ошибка, то в теле ответа будет ее представление (в различных форматах, в зависимости от клиента).
+
+Пример получения docx-документа:
+```
+/converter/generated.docx?src=https%3A%2F%2Fgithub.com%2FCyberSlaffko%2Fjava-test-case%2Fraw%2Fmaster%2Fdocbook-parser%2Fsrc%2Ftest%2Fresources%2Fwith_xinclude%2Findex.xml
+```
+
+Пример получения pdf-документа:
+```
+/converter/generated.pdf?src=https%3A%2F%2Fbitbucket.org%2FLab50%2Fespd-docbook5%2Fraw%2Fd244a2fa6fc03343a0c642713ff989e1d718d9d3%2F%25D1%2588%25D0%25B0%25D0%25B1%25D0%25BB%25D0%25BE%25D0%25BD%25D1%258B%2F%25D0%25BF%25D0%25BE%25D1%258F%25D1%2581%25D0%25BD%25D0%25B8%25D1%2582%25D0%25B5%25D0%25BB%25D1%258C%25D0%25BD%25D0%25B0%25D1%258F_%25D0%25B7%25D0%25B0%25D0%25BF%25D0%25B8%25D1%2581%25D0%25BA%25D0%25B0%2Fbook.xml&tpl=http%3A%2F%2Flab50.net%2Fxsl%2Fespd%2Fespd.xsl&params=%7B%27body.font.family%27%3A%27DejaVu+Serif%27%2C+%27sans.font.family%27%3A%27Liberation+Sans%27%2C+%27title.font.family%27%3A%27DejaVu+Sans%27%2C+%27monospace.font.family%27%3A%27DejaVu+Sans+Mono%27%2C+%27symbol.font.family%27%3A%27OpenSymbol%27%7D
+```
+
+Для тестирования в приложении есть простенькая страничка (`/index.html`), с которой можно выполнить запрос на конвертацию.
+
 # Задание
 
 1. Преобразовать приложение в web-сервис.

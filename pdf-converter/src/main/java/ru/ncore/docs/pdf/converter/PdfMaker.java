@@ -130,6 +130,7 @@ public class PdfMaker {
 
         }catch(Exception e){
             logger.error("Error while processing pdf",e);
+            throw e;
         }
     }
 
