@@ -42,6 +42,13 @@ public class ParaRenderer extends IContentRenderer {
                 if (null != renderer) {
                     renderer.render(wordDocumentData);
                 }
+            } else if (innerContent.isInline()) {
+                rendered = false;
+
+                IContentRenderer renderer = ContentRendererFactory.getRenderer(innerContent, document, relationManager);
+                if (null != renderer) {
+                    renderer.render(innerData);
+                }
             } else {
                 rendered = innerParaRender(innerData, innerContent, templateFor(innerContent)) || rendered;
             }
@@ -89,6 +96,9 @@ public class ParaRenderer extends IContentRenderer {
                     default:
                         return "templates/document/ref_obj.twig";
                 }
+            //case INLINEEQUATION:
+            case INLINEMEDIAOBJECT:
+                return "templates/document/para_inlinemediaobject.twig";
             default:
                 logger.warn(String.format("Unknown inline element %s", type.getType()));
         }

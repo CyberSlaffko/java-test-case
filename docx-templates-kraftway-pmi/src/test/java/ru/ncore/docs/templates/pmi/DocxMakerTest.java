@@ -126,6 +126,12 @@ public class DocxMakerTest {
         makeDoc(resPath);
     }
 
+    @Test
+    public void renderInlineImages() throws URISyntaxException, IOException, InvalidFormatException {
+        java.nio.file.Path resPath = java.nio.file.Paths.get("d:\\Temp\\inlineimages.xml");
+        makeDoc(resPath);
+    }
+
     private void makeDoc(Path resPath) throws URISyntaxException, IOException, InvalidFormatException {
         Parser parser = new Parser();
         final Document parseResult = parser.parse(resPath.toUri().toURL().toString());

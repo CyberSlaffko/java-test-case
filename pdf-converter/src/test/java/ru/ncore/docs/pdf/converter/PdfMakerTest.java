@@ -12,6 +12,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.net.URI;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +38,7 @@ class PdfMakerTest {
 
     @Test
     public void xsltTransformTest()throws Exception{
+        assertNotNull(pdfMaker);
         InputStream xsl = getClass().getResourceAsStream("/xml/simple.xml");
         assertNotNull(xsl);
         xmlEmptyInputStream.reset();
@@ -49,7 +52,7 @@ class PdfMakerTest {
         }};
         ByteArrayOutputStream xsltOutputStream = new ByteArrayOutputStream();
         Result xsltResult = new StreamResult(xsltOutputStream);
-        PdfMaker.xsltProcess(xmlSource, xslSource, param, xsltResult);
+        pdfMaker.xsltProcess(xmlSource, xslSource, param, xsltResult);
         String xsltOutput = xsltOutputStream.toString();
         assertNotNull(xsltOutput);
         assertTrue(xsltOutput.contains("VALUE"));
@@ -98,6 +101,7 @@ class PdfMakerTest {
     }
 
     @Test
+    @Disabled
     public void generatePdfByDocbook()throws Exception{
         assertNotNull(pdfMaker);
         final Map<String,Object> parameters = new HashMap<String, Object>(){{
@@ -110,8 +114,27 @@ class PdfMakerTest {
         Path pdfFilePath = Paths.get(".\\target\\test.pdf");
         try (
                 OutputStream out = Files.newOutputStream(pdfFilePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                InputStream confStream = getClass().getResourceAsStream(PdfMaker.DEFAULT_FOP_CONFIG);
         ) {
-            pdfMaker.generateOut(parameters, new StreamSource(URI.create("https://bitbucket.org/Lab50/espd-docbook5/raw/d244a2fa6fc03343a0c642713ff989e1d718d9d3/%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D1%8B/%D0%BF%D0%BE%D1%8F%D1%81%D0%BD%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F_%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%BA%D0%B0/book.xml").toASCIIString()), new StreamSource(URI.create("http://lab50.net/xsl/espd/espd.xsl").toASCIIString()), MimeConstants.MIME_PDF, out);
+            URI baseUri = URI.create("file:///d:/Temp/");
+            pdfMaker = new PdfMaker(baseUri, confStream);
+            pdfMaker.generateOut(parameters, "file:///d:/Temp/inlineimages.xml", "file:///d:/JavaProjects/Lab50-espd-docbook5-d244a2fa6fc0/espd/espd.xsl", MimeConstants.MIME_PDF, out);
+        }
+        assertTrue(Files.exists(pdfFilePath));
+        assertTrue(Files.isRegularFile(pdfFilePath));
+        assertTrue(Files.getFileStore(pdfFilePath).getTotalSpace() > 100);
+    }
+
+    @Test
+    public void generatePdfByTestDocbook()throws Exception{
+        assertNotNull(pdfMaker);
+        Path pdfFilePath = Paths.get(".\\target\\test.pdf");
+        try (
+                OutputStream out = Files.newOutputStream(pdfFilePath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                InputStream confStream = getClass().getResourceAsStream(PdfMaker.DEFAULT_FOP_CONFIG);
+        ) {
+            String xmlSource = Paths.get("d:\\Temp\\XML docs\\polozh_sprinta\\polozh_sprinta.xml").toUri().toASCIIString();
+            pdfMaker.generateOut(null, xmlSource, URI.create("file:///d:/JavaProjects/Lab50-espd-docbook5-d244a2fa6fc0/sample1.xsl").toASCIIString(), MimeConstants.MIME_PDF, out);
         }
         assertTrue(Files.exists(pdfFilePath));
         assertTrue(Files.isRegularFile(pdfFilePath));

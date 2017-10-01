@@ -42,8 +42,14 @@ public class ContentRendererFactory {
             case FIGURE:
                 renderer = new FigureRenderer();
                 break;
-            case MEDIAOBJECT:
+            case INLINEEQUATION:
                 renderer = new NoopRenderer();
+                break;
+            case MEDIAOBJECT:
+                renderer = new MediaObjectRenderer();
+                break;
+            case INLINEMEDIAOBJECT:
+                renderer = new InlineObjectRenderer();
                 break;
             case IMAGEOBJECT:
                 renderer = new NoopRenderer();

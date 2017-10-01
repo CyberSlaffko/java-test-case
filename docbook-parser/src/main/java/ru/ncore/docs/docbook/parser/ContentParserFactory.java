@@ -69,6 +69,10 @@ public class ContentParserFactory {
                 return new ProgramListingParser();
             case "mediaobject":
                 return new ObjectParser(MEDIAOBJECT);
+            case "inlineequation":
+                return new ObjectParser(INLINEEQUATION);
+            case "inlinemediaobject":
+                return new ObjectParser(INLINEMEDIAOBJECT);
             case "imageobject":
                 return new ObjectParser(IMAGEOBJECT);
             case "imagedata":
@@ -83,6 +87,7 @@ public class ContentParserFactory {
             case "oxy_custom_end":
             case "#comment":
             case "lb":
+            case "textobject":
                 // NOOP
                 return null;
             case "link":

@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import ru.ncore.docs.docbook.document.ChapterContent;
 import ru.ncore.docs.docbook.parser.algorithms.LeafContentParserAlgorithm;
+import ru.ncore.docs.docbook.utils.XMLUtils;
 
 import java.net.URI;
 import java.nio.file.Path;
@@ -52,5 +54,9 @@ public class ImageDataParser extends LeafContentParserAlgorithm {
                     logger.info(String.format("Tag %s - Unknown attribute %s with value %s", xmlDocument.getLocalName(), item.getNodeName(), item.getNodeValue()));
             }
         }
+
+        NodeList ancestorNodes = XMLUtils.getNodes(xmlDocument, "./ancestor::mediaobject");
+        if (ancestorNodes != null && ancestorNodes.getLength() > 0)
+            content.addAdditionalAttribute("isInMediaobject", "1");
     }
 }

@@ -96,6 +96,10 @@ public class ChapterContent {
         return type == Type.MEDIAOBJECT || type == Type.FIGURE;
     }
 
+    public boolean isInline() {
+        return type == Type.INLINEEQUATION || type == Type.INLINEMEDIAOBJECT;
+    }
+
     /**
      * Позволяет добавлять дополнительные аттрибуты к содержимому
      *
@@ -146,7 +150,10 @@ public class ChapterContent {
 
         PROGRAMLISTING,
 
+        INLINEEQUATION, // Уравнение в тексте
+
         FIGURE,
+        INLINEMEDIAOBJECT, // Медиа-объект в тексте (картинка, видео, ...)
         MEDIAOBJECT,
         IMAGEOBJECT,
         IMAGEDATA,

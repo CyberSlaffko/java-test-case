@@ -1,10 +1,18 @@
 package ru.ncore.docs.pdf.converter;
 
+import org.apache.avalon.framework.configuration.Configuration;
+import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.*;
 import org.apache.xmlgraphics.util.MimeConstants;
 import org.slf4j.Logger;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -33,7 +41,11 @@ public class PdfMaker {
     private URI fopBaseURI = null;
     private InputStream fopConfigStream = null;
 
-    FopFactory fopFactory;
+    Configuration fopConfig;
+
+    DocumentBuilder documentBuilder;
+
+    TransformerFactory transformerFactory;
 
     /**
      * Default constructor trying to initialize FopFactory with baseURI of current directory
@@ -41,7 +53,9 @@ public class PdfMaker {
      * in classpath and default system locations.
      */
     public PdfMaker() {
-        initFopFactory();
+        initFopFactoryConfiguration();
+        initDocumentBuilder();
+        initTransformerFactory();
     }
 
     /**
@@ -52,12 +66,14 @@ public class PdfMaker {
     public PdfMaker(URI fopBaseURI, InputStream fopConfigStream) {
         this.fopBaseURI = fopBaseURI;
         this.fopConfigStream = fopConfigStream;
-        initFopFactory();
+        initFopFactoryConfiguration();
+        initDocumentBuilder();
+        initTransformerFactory();
     }
 
-    private void initFopFactory() {
+    private void initFopFactoryConfiguration() {
         try {
-            logger.info("Initializing FopFactory instance");
+            logger.info("Initializing Fop configuration instance");
             if (fopBaseURI == null) {
                 fopBaseURI = Paths.get("").toUri();
             }
@@ -66,11 +82,32 @@ public class PdfMaker {
                 if (confURL == null) throw new FileNotFoundException("Cannot find default FOP configuration file \"" + DEFAULT_FOP_CONFIG + "\"");
                 fopConfigStream = confURL.openStream();
             }
-            fopFactory = FopFactory.newInstance(fopBaseURI, fopConfigStream);
+
+            DefaultConfigurationBuilder cfgBuilder = new DefaultConfigurationBuilder();
+            fopConfig = cfgBuilder.build(fopConfigStream);
+
         } catch (Exception e) {
-            logger.error("Cannot initialize fopFactory", e);
-            fopFactory = null;
+            logger.error("Cannot initialize fopConfig", e);
+            fopConfig = null;
         }
+    }
+
+    private void initDocumentBuilder() {
+        try {
+            logger.info("Initializing DocumentBuilder instance");
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setIgnoringElementContentWhitespace(true);
+            dbf.setXIncludeAware(true);
+            dbf.setNamespaceAware(true);
+            documentBuilder = dbf.newDocumentBuilder();
+        } catch (Exception e) {
+            logger.error("Cannot initialize documentBuilder", e);
+            documentBuilder = null;
+        }
+    }
+
+    private void initTransformerFactory() {
+        this.transformerFactory = TransformerFactory.newInstance();
     }
 
     public void cleanUp() throws Exception {
@@ -86,26 +123,55 @@ public class PdfMaker {
         generateOut(parameters, xml, xsl, MimeConstants.MIME_PNG, out);
     }
 
+    private Source getXmlSource(InputSource xmlSource) throws IOException, SAXException {
+        if (documentBuilder == null)
+            throw new IllegalStateException("documentBuilder not initialized");
+
+        Document xmlDocument = documentBuilder.parse(xmlSource);
+        xmlDocument.getDocumentElement().normalize();
+        return new DOMSource(xmlDocument, xmlSource.getSystemId());
+    }
+
+    private Source getXmlSource(String xmlURL) throws IOException, SAXException {
+        return getXmlSource(new InputSource(xmlURL));
+    }
+
+    private Source getXmlSource(InputStream xmlStream, String systemId) throws IOException, SAXException {
+        InputSource xmlSource = new InputSource(xmlStream);
+        if (systemId != null) xmlSource.setSystemId(systemId);
+        return getXmlSource(xmlSource);
+    }
+
     public void generateOut(Map<String, Object> parameters, String xmlURL, String xslURL, String mime, OutputStream out) throws Exception {
-        Source xmlSource = new StreamSource(xmlURL);
+        Source xmlSource = getXmlSource(xmlURL);
         Source xslSource = new StreamSource(xslURL);
         generateOut(parameters, xmlSource, xslSource, mime, out);
     }
 
     public void generateOut(Map<String, Object> parameters, InputStream xml, InputStream xsl, String mime, OutputStream out) throws Exception {
-        Source xmlSource = new StreamSource(xml);
+        Source xmlSource = getXmlSource(xml, null);
         Source xslSource = new StreamSource(xsl);
         generateOut(parameters, xmlSource, xslSource, mime, out);
     }
 
     public void generateOut(Map<String, Object> parameters, Source xmlSource, Source xslSource, String mime, OutputStream out) throws Exception {
         try {
-            if (fopFactory == null)
-                throw new IllegalStateException("FopFactory not initialized");
+            if (fopConfig == null)
+                throw new IllegalStateException("Fop configuration not initialized");
+
+            if (transformerFactory == null)
+                throw new IllegalStateException("TransformerFactory not initialized");
 
             if(parameters == null)parameters = new HashMap<>();
 
             if(mime == null)mime = DEFAULT_MIME;
+
+            URI xmlSourceURI = xmlSource.getSystemId() != null ? new URI(xmlSource.getSystemId()) : Paths.get("").toUri();
+            URI fopBaseURI = xmlSourceURI.resolve(".");
+
+            logger.debug("Fop baseURI " + fopBaseURI);
+
+            FopFactory fopFactory = new FopFactoryBuilder(fopBaseURI).setConfiguration(fopConfig).build();
 
             FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
 
@@ -115,10 +181,9 @@ public class PdfMaker {
             if (parameters.containsKey("author"))
                 foUserAgent.setTitle((String) parameters.get("author"));
 
-            Fop fop = fopFactory.newFop(mime, foUserAgent, out);
+            Fop fop = foUserAgent.newFop(mime, out);
 
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer = factory.newTransformer(xslSource);
+            Transformer transformer = transformerFactory.newTransformer(xslSource);
 
             for(String parameterName: parameters.keySet()){
                 transformer.setParameter(parameterName,parameters.get(parameterName));
@@ -134,9 +199,11 @@ public class PdfMaker {
         }
     }
 
-    public static void xsltProcess(Source xmlSource,Source xslSource,Map<String,Object> parameters,Result outTarget) throws Exception{
-        TransformerFactory tFactory = TransformerFactory.newInstance();
-        Transformer transformer = tFactory.newTransformer(xslSource);
+    public void xsltProcess(Source xmlSource,Source xslSource,Map<String,Object> parameters,Result outTarget) throws Exception{
+        if (transformerFactory == null)
+            throw new IllegalStateException("TransformerFactory not initialized");
+
+        Transformer transformer = transformerFactory.newTransformer(xslSource);
         for(String parameterName: parameters.keySet()){
             transformer.setParameter(parameterName,parameters.get(parameterName));
         }

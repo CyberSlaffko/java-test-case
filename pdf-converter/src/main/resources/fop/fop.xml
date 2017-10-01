@@ -3,6 +3,8 @@
     <!-- Classpath font searching not working with cache -->
     <use-cache>false</use-cache>
 
+    <strict-validation>false</strict-validation>
+    
     <!-- Source resolution in dpi (dots/pixels per inch) for determining the size of pixels in SVG and bitmap images, default: 72dpi -->
     <source-resolution>72</source-resolution>
     <!-- Target resolution in dpi (dots/pixels per inch) for specifying the target resolution for generated bitmaps, default: 72dpi -->
