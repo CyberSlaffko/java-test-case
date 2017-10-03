@@ -1,5 +1,7 @@
 package ru.ncore.docs.docbook.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -14,6 +16,8 @@ import java.util.HashMap;
  * Created by Вячеслав Молоков on 29.04.2017.
  */
 public abstract class XMLUtils {
+    protected static Logger logger = LoggerFactory.getLogger(XMLUtils.class);
+
     static public String getNodeValue(Document xmlDocument, String xpath) {
         XPath xPath = getxPath();
         try {
@@ -24,7 +28,7 @@ public abstract class XMLUtils {
 
             return node.getNodeValue().trim().replaceAll("\\s+", " ");
         } catch (XPathExpressionException e) {
-            e.printStackTrace();
+            logger.warn("Error getting node value", e);
             return null;
         }
     }
@@ -39,7 +43,7 @@ public abstract class XMLUtils {
 
             return node.getNodeValue();
         } catch (XPathExpressionException e) {
-            e.printStackTrace();
+            logger.warn("Error getting node value (no trim)", e);
             return "";
         }
     }
@@ -55,7 +59,7 @@ public abstract class XMLUtils {
 
             return nodeList;
         } catch (XPathExpressionException e) {
-            e.printStackTrace();
+            logger.warn("Error getting node list from document", e);
             return null;
         }
     }
@@ -81,7 +85,7 @@ public abstract class XMLUtils {
 
             return nodeList;
         } catch (XPathExpressionException e) {
-            e.printStackTrace();
+            logger.warn("Error getting node list from node", e);
             return null;
         }
     }

@@ -59,13 +59,11 @@
                     <artifactId>avalon-framework-impl</artifactId>
                     <groupId>org.apache.avalon.framework</groupId>
                 </exclusion>-->
-            </exclusions>
-            <!--<exclusions>
-                <exclusion>
+                <!--<exclusion>
                     <artifactId>xalan</artifactId>
                     <groupId>xalan</groupId>
-                </exclusion>
-            </exclusions>-->
+                </exclusion>-->
+            </exclusions>
         </dependency>
         <!-- these two are to correct issues in fop dependency -->
         <!--<dependency>
@@ -79,7 +77,7 @@
             <version>4.2.0</version>
         </dependency>-->
         <!-- FOP Dependency end -->
-        <dependency>
+        <!--<dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
             <version>2.7.2</version>
@@ -88,7 +86,7 @@
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
             <version>2.11.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

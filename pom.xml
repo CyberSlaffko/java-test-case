@@ -69,6 +69,11 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <artifactId>xalan</artifactId>
+                <groupId>xalan</groupId>
+                <version>2.7.2</version>
+            </dependency>
+            <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>docbook-parser</artifactId>
                 <version>${project.version}</version>
