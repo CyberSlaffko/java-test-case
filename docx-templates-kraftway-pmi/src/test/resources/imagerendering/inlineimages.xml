@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://xsd.org/xml/5.0/rng/docbookxi.rng" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://xsd.org/xml/5.0/rng/xsd.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="ru" version="5.0">
+    <info>
+        <title>Тестоваый документ с инлайн изображением</title>
+        <subtitle>Тестирование конвертера docbook</subtitle>
+        <author>
+            <orgname>ООО Тесто</orgname>
+            <address>
+                <city>Санкт-Петербург</city>
+                <street>ул. Пограничника Гарькавого, дом 36, корп. 1, литер А, пом. 10Н</street>
+                <postcode>198259</postcode>
+                <country>Россия</country>
+            </address>
+            <email>team@lab50.net</email>
+        </author>
+        <pubdate><?dbtimestamp format="Y"?></pubdate>
+    </info>
+
+    <preface>
+        <info>
+            <title>Аннотация</title>
+        </info>
+        <para>В документе приведен пример использования инлайн изображений в параграфаг.</para>
+    </preface>
+
+    <chapter>
+        <title>Глава 1</title>
+        <section>
+            <title>Тестирование</title>
+
+            <para>Einstein's most famous equation,
+             <!--<inlineequation>-->
+               <inlinemediaobject>
+                 <imageobject>
+                   <imagedata fileref="db5d_refeqn03.png"/>
+                 </imageobject>
+                 <textobject>
+                   <phrase>E=mc<superscript>2</superscript></phrase>
+                 </textobject>
+               </inlinemediaobject>
+             <!--</inlineequation>-->, expresses the relationship between matter and energy.
+            </para>
+        </section>
+    </chapter>
+</book>

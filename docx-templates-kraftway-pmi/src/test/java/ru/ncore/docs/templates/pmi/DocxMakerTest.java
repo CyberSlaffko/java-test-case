@@ -128,7 +128,7 @@ public class DocxMakerTest {
 
     @Test
     public void renderInlineImages() throws URISyntaxException, IOException, InvalidFormatException {
-        java.nio.file.Path resPath = java.nio.file.Paths.get("d:\\Temp\\inlineimages.xml");
+        java.nio.file.Path resPath = java.nio.file.Paths.get(".\\src\\test\\resources\\imagerendering\\inlineimages.xml");
         makeDoc(resPath);
     }
 
