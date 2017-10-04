@@ -11,9 +11,6 @@ import ru.ncore.docs.templates.pmi.TemplateUtils;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-/**
- * Created by VKolesnikov on 30.09.2017.
- */
 public class InlineObjectRenderer extends IContentRenderer {
     private final static Logger logger = LoggerFactory.getLogger(InlineObjectRenderer.class);
 
